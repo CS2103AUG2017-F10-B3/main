@@ -767,7 +767,113 @@ Use case ends.
 +
 Use case resumes at step 2.
 
-{More to be added}
+[discrete]
+=== Use case: Add person
+
+*MSS*
+
+1.  User requests to add person
+2.  AddressBook adds the person
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Person's name is not found in Addressbook.
+** 2a1. Person is not added to Addressbook.
++
+Use case ends.
+
+[discrete]
+=== Use case: View help command
+
+*MSS*
+
+1.  User requests to view help commands
+2.  AddressBook lists help commands
++
+Use case ends.
+
+[discrete]
+=== Use case: Edit contact
+
+*MSS*
+
+1.  User requests to edit contact
+2.  AddressBook updates the contact
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Person's name is not found in Addressbook.
+** 2a1. Contact is not edited.
++
+Use case ends.
+
+[none]
+* 2b. Person's name is found in Addressbook.
+** 2b1. Error message and ontact is not edited.
++
+Use case ends.
+
+[none]
+* 2c. No field changed.
+** 2c1. Error message and ontact is not edited.
++
+Use case ends.
+
+[discrete]
+=== Use case: List contact
+
+*MSS*
+
+1.  User requests to list contacts
+2.  AddressBook lists the contacts
++
+Use case ends.
+
+[discrete]
+=== Use case: Clear Addressbook
+
+*MSS*
+
+1.  User requests to clear Addressbook
+2.  AddressBook clears the contacts
++
+Use case ends.
+
+[discrete]
+=== Use case: find contact
+
+*MSS*
+
+1.  User requests to find 2 different names
+2.  AddressBook lists the contacts found
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Both persons' names are not found in Addressbook.
+** 2a1. No contact listed.
++
+Use case ends.
+
+[none]
+* 2b. Only one person's name is found in Addressbook.
+** 2b1. Only contact found is listed.
++
+Use case ends.
+
+[none]
+* 2c. Names are incomplete.
+** 2c1. No contact listed.
++
+Use case ends.
 
 [appendix]
 == Non Functional Requirements
