@@ -13,6 +13,7 @@ import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.NewResultAvailableEvent;
 
+
 /**
  * A ui for the status bar that is displayed at the header of the application.
  */
@@ -35,7 +36,10 @@ public class ResultDisplay extends UiPart<Region> {
     @Subscribe
     private void handleNewResultAvailableEvent(NewResultAvailableEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        Platform.runLater(() -> displayed.setValue(event.message));
+       /* Platform.runLater(() -> displayed.setValue(event.message)); */
+        displayed.setValue(event.message);
+
+
     }
 
 }
