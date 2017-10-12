@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataConversionException;
 import seedu.address.commons.util.FileUtil;
+import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 
 /**
@@ -74,9 +75,15 @@ public class XmlAddressBookStorage implements AddressBookStorage {
         XmlFileStorage.saveDataToFile(file, new XmlSerializableAddressBook(addressBook));
     }
 
-
+    @Override
     public void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         saveAddressBook(addressBook, getAddressBookFilePath() + "-backup.xml");
+    }
+
+    @Override
+    public void eraseAddressBook(AddressBook addressBook) throws IOException {
+        addressBook.resetData(null);
+        saveAddressBook(addressBook, filePath);
     }
 
 }

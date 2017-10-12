@@ -11,6 +11,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.storage.DataSavingExceptionEvent;
 import seedu.address.commons.exceptions.DataConversionException;
+import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
 
@@ -80,6 +81,11 @@ public class StorageManager extends ComponentManager implements Storage {
     @Override
     public void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         addressBookStorage.saveAddressBook(addressBook, addressBookStorage.getAddressBookFilePath() + "-backup.xml");
+    }
+
+    @Override
+    public void eraseAddressBook(AddressBook addressBook) throws IOException {
+        addressBookStorage.eraseAddressBook(null);
     }
 
 

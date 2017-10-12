@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import seedu.address.commons.exceptions.DataConversionException;
+import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 
 /**
@@ -47,4 +48,6 @@ public interface AddressBookStorage {
      * @throws IOException if there was any problem writing to the file.
      */
     void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
+
+    void eraseAddressBook(AddressBook addressBook) throws IOException;
 }
