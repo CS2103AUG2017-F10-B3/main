@@ -91,6 +91,9 @@ public class AddressBook implements ReadOnlyAddressBook {
         // in the person list.
         persons.add(newPerson);
     }
+    public void sort(int option)throws UniquePersonList.AddressBookIsEmpty {
+        persons.sort(option);
+    }
 
     /**
      * Replaces the given person {@code target} in the list with {@code editedReadOnlyPerson}.

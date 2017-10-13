@@ -124,6 +124,12 @@ public class AddCommandTest {
         }
 
         @Override
+        public void sortAddressBook(int option) {
+            fail("This method should not be called");
+
+        }
+
+        @Override
         public ObservableList<ReadOnlyPerson> getFilteredPersonList() {
             fail("This method should not be called.");
             return null;
