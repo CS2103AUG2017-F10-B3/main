@@ -10,7 +10,7 @@ ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
 endif::[]
-:repoURL: https://github.com/se-edu/addressbook-level4
+:repoURL: https://github.com/CS2103AUG2017-F10-B3/main.git
 
 By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
 
@@ -245,6 +245,22 @@ Format: `exit`
 
 Address book data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
+
+=== Locating persons by name: `letter`
+
+Finds persons whose names contain any of the given keywords. +
+Format: `letter KEYWORD [One Capital letter character]`
+
+****
+* The search is not case insensitive. e.g `A` will only match `A`
+* Only the name is searched.
+* Only first character of the word will be matched e.g. `A` will match `Alan`
+*****
+
+Examples:
+
+* `letter A` +
+Returns `Alan` and `Alex Doe`
 
 == FAQ
 

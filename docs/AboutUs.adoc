@@ -22,7 +22,7 @@ Responsibilities: Model; Documentation; Integration
 '''
 
 === Lai Feng
-image::lejolly.jpg[width="150", align="left"]
+image::henryheyhey92.png[width="150", align="left"]
 {empty}[https://github.com/henryheyhey92[github]] [<<laifeng#, portfolio>>]
 
 Role: Team Lead +
