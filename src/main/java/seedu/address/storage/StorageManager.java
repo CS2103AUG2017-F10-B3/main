@@ -84,12 +84,6 @@ public class StorageManager extends ComponentManager implements Storage {
     }
 
     @Override
-    public void eraseAddressBook(AddressBook addressBook) throws IOException {
-        addressBookStorage.eraseAddressBook(addressBook);
-    }
-
-
-    @Override
     @Subscribe
     public void handleAddressBookChangedEvent(AddressBookChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event, "Local data changed, saving to file"));

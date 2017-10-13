@@ -79,11 +79,4 @@ public class XmlAddressBookStorage implements AddressBookStorage {
     public void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         saveAddressBook(addressBook, getAddressBookFilePath() + "-backup.xml");
     }
-
-    @Override
-    public void eraseAddressBook(AddressBook addressBook) throws IOException {
-        addressBook.resetData(null);
-        saveAddressBook(addressBook, filePath);
-    }
-
 }
