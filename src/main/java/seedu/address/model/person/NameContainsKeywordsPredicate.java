@@ -1,9 +1,9 @@
 package seedu.address.model.person;
 
+import seedu.address.commons.util.StringUtil;
+
 import java.util.List;
 import java.util.function.Predicate;
-
-import seedu.address.commons.util.StringUtil;
 
 /**
  * Tests that a {@code ReadOnlyPerson}'s {@code Name} matches any of the keywords given.
@@ -17,8 +17,21 @@ public class NameContainsKeywordsPredicate implements Predicate<ReadOnlyPerson> 
 
     @Override
     public boolean test(ReadOnlyPerson person) {
-        return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
+
+        //String letter = person.getName().fullName;
+        if (keywords.isEmpty()) {
+            return keywords.stream()
+                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
+        }
+        if (keywords.get(0).length() > 1) {
+            return keywords.stream()
+                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
+        } else {
+            String letter2 = String.valueOf(person.getName().fullName.charAt(0));
+            //System.out.println(letter2.length());
+            return keywords.stream()
+                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(letter2, keyword));
+        }
     }
 
     @Override
