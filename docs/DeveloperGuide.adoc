@@ -218,6 +218,52 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
+-`The findByLetter Implementation`;
+
+Find all person that is related to the input character.
+Key idea:
+
+(1)is to compare the input letter with the names in the list and display
+the results.
+
+(2) exact the first letter of every name in the list for comparison.
+
+Java file has been modified;
+
+-`NameContainsKeywordPredicate.java`; for the if else statement.
+
+-`AddressBookParser.java`; for the case.
+
+-`FindCommandLetter.java`(*newly created); for the find letter command.
+
+API : Logic.java
+
+Logic uses the AddressBookParser class to parse the user command.
+
+This results in a Command object which is executed by the LogicManager.
+
+The command execution can affect the Model (e.g. find a person) and/or raise events.
+
+The result of the command execution is encapsulated as a CommandResult object which is passed back to the Ui.
+
+Given below is the Sequence Diagram for interactions within the Logic component for the execute("Letter A") API call.
+
+image::FindByLetterUML.png[width="350"]
+
+-`person number in list implementation`
+
+-`Passcode lock implementation`
+
+The following implementation is to add security features to the application
+
+initial draft idea:
+
+if user name & password matches the input, user get to access the application.
+
+-draft execution: will do a while loop in the MainApp class.
+
+image::passcodedraft1.png[width="300"]
+
 // tag::undoredo[]
 === Undo/Redo mechanism
 

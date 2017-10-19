@@ -249,6 +249,23 @@ There is no need to save manually.
 === Locating persons by name: `letter`
 
 Finds persons whose names contain any of the given keywords. +
+
+Format: `letter KEYWORD [1 alphabet character only]`
+
+****
+* The search is non-case insensitive. e.g `A` will match `Alan`(*for example)
+* Only the name is searched.
+* Only full words will be matched e.g. `h` will not match `Hans`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `H` will return `Hans Gruber`, `Ho Yang`
+****
+
+Examples:
+
+* `letter J` +
+Returns `John` and `John Doe`
+* `letter B` +
+Returns any person having names `Betsy`, `Bean`, or `Ben`
+=======
 Format: `letter KEYWORD [One Capital letter character]`
 
 ****
@@ -287,6 +304,9 @@ e.g.`select 2`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
+
+* *letter* : `letter KEYWORD [1 alphabet character only]`
+=======
 
 == Coming soon in V2.0
 * * Add birthdays
