@@ -51,6 +51,7 @@ public class MainApp extends Application {
     protected Config config;
     protected UserPrefs userPrefs;
 
+    Stage window;
 
     @Override
     public void init() throws Exception {
@@ -184,20 +185,34 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         logger.info("Starting AddressBook " + MainApp.VERSION);
+
+
         ui.start(primaryStage);
+        window = primaryStage;
+        window.setOnCloseRequest(e ->{
+            e.consume();
+            stop();
+        });
+
     }
 
     @Override
     public void stop() {
+        boolean answer = ConfirmBox.display("Exit Check Protocol","Confirm on exiting the program?");
+
+        if(answer) {
+            //GoodByeBox.display("Title", "Good bye and have a nice day");
         logger.info("============================ [ Stopping Address Book ] =============================");
-        ui.stop();
-        try {
-            storage.saveUserPrefs(userPrefs);
-        } catch (IOException e) {
-            logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
+
+            ui.stop();
+            try {
+                storage.saveUserPrefs(userPrefs);
+            } catch (IOException e) {
+                logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
+            }
+            Platform.exit();
+            System.exit(0);
         }
-        Platform.exit();
-        System.exit(0);
     }
 
     @Subscribe

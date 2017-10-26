@@ -10,13 +10,14 @@ ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
 endif::[]
-:repoURL: https://github.com/se-edu/addressbook-level4
+:repoURL: https://github.com/CS2103AUG2017-F10-B3/main.git
 
 By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
 
 == Quick Start
 
 .  Ensure you have Java version `1.8.0_60` or later installed in your Computer.
+
 +
 [NOTE]
 Having any Java 8 version is not enough. +
@@ -67,6 +68,17 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+=== Sorting the addressbook: `sort`
+
+Sorts the addressbook by address or by name reverts back to unsorted state upon app reboot. +
+Format: `sort OPTION`
+
+***
+* OPTION keyword allows to select to sort by name or address.
+* To sort by name use `/n`. Example `sort /n`.
+* To sort by address use `/a`. Example `sort /a`.
+***
+
 === Listing all persons : `list`
 
 Shows a list of all persons in the address book. +
@@ -111,6 +123,60 @@ Examples:
 Returns `john` and `John Doe`
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
+
+=== Locating persons by phone: `findEmail`
+
+Finds persons whose email contain any of the given keywords. +
+Format: `findEmail KEYWORD`
+
+****
+* The search is case insensitive. e.g. `hans` will match `Hans`
+* Partial word can also be searched. e.g. `john` will match `johndoe@example.com`
+* Only the email is searched.
+****
+
+Examples:
+
+* `findEmail jane` +
+Returns `janedoe@example.com`
+
+=== Locating persons by phone: `findPhone`
+
+Finds persons whose names contain any of the given keywords. +
+Format: `findPhone KEYWORD [MORE_KEYWORDS]`
+
+****
+* Only the phone number is searched.
+* Numbers containing keywords will be matched e.g. `111` will match `911100`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `222 333` will return `0222`, `9333`
+****
+
+Examples:
+
+* `findPhone 000` +
+Returns `10001` and `191000`
+* `find 111 222 333` +
+Returns any person having names `1111`, `0222`, or `9333`
+
+=== Locating persons by name: `letter`
+
+Finds persons whose names contain any of the given keywords. +
+
+Format: `letter KEYWORD [1 alphabet character only]`
+
+****
+* The search is non-case insensitive. e.g `A` will match `Alan`(*for example)
+* Only the name is searched.
+* Only full words will be matched e.g. `h` will not match `Hans`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `H` will return `Hans Gruber`, `Ho Yang`
+****
+
+Examples:
+
+* `letter J` +
+Returns `John` and `John Doe`
+* `letter B` +
+Returns any person having names `Betsy`, `Bean`, or `Ben`
 
 === Deleting a person : `delete`
 
@@ -227,6 +293,24 @@ Format: `exit`
 Address book data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
 
+=== Click on contact to search address
+
+Clicking on contact in list will search for its address in Google Maps.
+image::searchAddressUI.png[width="800"]
+
+=== Locating persons by name: `letter`
+
+Clicking on contact in list will search for its address in Google Maps.
+
+=== Number of person in list
+
+At the bottom of the addressbook, application will display the number of person in list.
+
+=== Exit program checker
+
+When user attempt to close the application, input "exit" command or close the application by accident,
+a window will pop out to make sure that user is firm on closing the application.
+
 == FAQ
 
 *Q*: How do I transfer my data to another Computer? +
@@ -243,6 +327,8 @@ e.g. `delete 3`
 e.g. `edit 2 n/James Lee e/jameslee@example.com`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
+* *FindByPhone* : `findPhone KEYWORD [MORE_KEYWORDS]` +
+e.g. `findPhone 000 111`
 * *List* : `list`
 * *Help* : `help`
 * *Select* : `select INDEX` +
@@ -250,3 +336,17 @@ e.g.`select 2`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
+* *letter* : `letter KEYWORD [1 alphabet character only]`
+=======
+
+== Coming soon in V2.0
+* * Add birthdays
+* * Customize UI colour theme
+* * Passcode login
+* * findPhone
+* * findEmail v1.2
+* * letter v1.2
+* * Google search Address when contact is selected v1.2
+* * Sort by address v1.2
+* * Copy to clipboard
+

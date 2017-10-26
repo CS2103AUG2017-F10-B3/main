@@ -10,7 +10,7 @@ ifdef::env-github[]
 :note-caption: :information_source:
 endif::[]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
-:repoURL: https://github.com/se-edu/addressbook-level4/tree/master
+:repoURL: https://github.com/CS2103AUG2017-F10-B3/main.git
 
 By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
 
@@ -216,7 +216,117 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 == Implementation
 
-This section describes some noteworthy details on how certain features are implemented.
+******************
+==Sort Command mechanism
+
+Overview: The sort command is able to sort by name or by address. Name is sorted alphabetically while
+addresses are sorted according to districts.
+
+How is it implemented: Sorting by name is done using the Java comparator with the compare method overridden
+in the SortName class using the method compareToIgnoreCase(). Sorting by address is done using a lookup table
+with the districts already pre-loaded.
+
+Why is it implemented this way: Sort by name is straightforward using the standard sorting approach however sorting
+by addresses is more complicated. Using a lookup table offers a definite sorting approach as compare to other approaches
+as for now standard user input for address cannot be guaranteed. However if this should change in the later
+versions. The approach may be changed as well.
+*******************
+
+
+// tag::findemail[]
+=== Find Email mechanism
+
+The find email mechanism is facilitated by regex. After finding matches, result will be stored in the filtered list that is showing on the UI.
+
+
+=== Add findPhone mechanism
+
+The findPhone mechanism is able to search for persons whose phone numbers contain any number being searched.
+
+Finds persons whose names contain any of the given keywords. +
+Format: `findPhone KEYWORD [MORE_KEYWORDS]`
+
+As long as contact has phone number that contains KEYWORD [MORE_KEYWORDS], it will be matched and displayed.
+
+Java files that have been modied:
+- `PhoneContainsKeywordPredicate.java`
+- `AddressBookParser.java`
+- `FindPhoneCommand`
+- Some test units have been updated.
+
+
+=== Search for address on Google Maps
+
+Clicking on the person's contact will search for selected contact's address on Google Maps, as shown below.
+image::searchAddressUI.png[width="800"]
+
+Further improvements might include using command line to search for address or just clicking on address line in person's contact.
+
+
+=== The findByLetter Implementation
+
+Find all person that is related to the input character.
+Key idea:
+
+(1)is to compare the input letter with the names in the list and display
+the results.
+
+(2) exact the first letter of every name in the list for comparison.
+
+Java file has been modified;
+
+-`NameContainsKeywordPredicate.java`; for the if else statement.
+
+-`AddressBookParser.java`; for the case.
+
+-`FindCommandLetter.java`(*newly created); for the find letter command.
+
+API : Logic.java
+
+Logic uses the AddressBookParser class to parse the user command.
+
+This results in a Command object which is executed by the LogicManager.
+
+The command execution can affect the Model (e.g. find a person) and/or raise events.
+
+The result of the command execution is encapsulated as a CommandResult object which is passed back to the Ui.
+
+Given below is the Sequence Diagram for interactions within the Logic component for the execute("Letter A") API call.
+
+image::FBL2.png[width="800"]
+
+-`person number in list implementation`
+
+feature has implemented, but writeup still in progress...
+
+-`Program exit checker implementation`
+
+This feature is to give the user a confirmation on closing the application.
+
+The files involved in the feature are, MainApp and ConfirmBox.
+Methods that are involved in buliding this feature is start() & stop().
+
+When user input exit command or click on the close button, the application will
+call out another window to ask the user's confirmation on closing the application.
+
+setOnCloseRequest will trigger when user close or exit the program.
+ConfirmBox will return true or false value of the user intention to close or continue on the program.
+
+image::exitprogramchecker.png[width="800"]
+
+The above is a illustration of how exit program funs.
+
+-`Passcode lock implementation`
+
+The following implementation is to add security features to the application
+
+initial draft idea:
+
+if user name & password matches the input, user get to access the application.
+
+-draft execution: will do a while loop in the MainApp class.
+
+image::passcodedraft1.png[width="800"]
 
 // tag::undoredo[]
 === Undo/Redo mechanism
@@ -721,17 +831,65 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 [width="59%",cols="22%,<23%,<25%,<30%",options="header",]
 |=======================================================================
 |Priority |As a ... |I want to ... |So that I can...
-|`* * *` |new user |see usage instructions |refer to instructions when I forget how to use the App
+|`* * *` |user |user-friendly UI |no need to read user manual
 
-|`* * *` |user |add a new person |
+|`* * *` |user |sorted alphabetically for default |be easier to find contacts
 
-|`* * *` |user |delete a person |remove entries that I no longer need
+|`* * *` |user |select a few contacts(for deleting/printing/sending) |take action at once
 
-|`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
+|`* * *` |user |clear the entire addressbook |clear all at once
 
-|`* *` |user |hide link:#private-contact-detail[private contact details] by default |minimize chance of someone else seeing them by accident
+|`* * *` |new user |overview of input commands |use the addressbook right away
 
-|`*` |user with many persons in the address book |sort persons by name |locate a person easily
+|`* * *` |user |add a person |look one up if I forgot ones details
+
+|`* * *` |user |search by partial of the name  |be easier to find contacts
+
+|`* * *` |user |edit contacts |keep the addresbook up-to-date
+
+|`* * *` |user |customize UI theme |feel more intimate with the addressbook
+
+|`* * *` |user |shortcuts for common commands |type less
+
+|`* * *` |user |delete a person |keep the addresbook up-to-date
+
+|`* * *` |user |categorise contacts |be easier to find contacts
+
+|`* *` |user |have a blacklist |identify the one I want to block
+
+|`* *` |user |remind me of the upcoming birthdays |celebrate my friends' birthday
+
+|`* *` |user |see birthdays of my contacts in calender view |be easier to spot if it is in weekdays
+
+|`* *` |user |print contacts |have a overview
+
+|`* *` |user |share contacts to my friends |make their life easier by having contacts without typing in one by one
+
+|`* *` |user |find by address |check who live around me
+
+|`* *` |user |save contacts in .csv format |export the addressbook
+
+|`* *` |user |sort by address |know if some of my contacts live close by
+
+|`* *` |user |restore the addressbook to the most recent status |restore the addressbook if I accidentally deleted it
+
+|`* *` |user |sort by phone number |be easier to find contacts
+
+|`* *` |user |redo/undo |restore the contact I altered
+
+|`* *` |user |find by email |find the one who send me emails
+
+|`* *` |user |passcode lock |protect the addressbook
+
+|`* *` |user |assign numbers(0-9) for VIPs |be easier to find VIPs
+
+|`* *` |user |input my search with voice |keep my hands free
+
+|`*` |user |send text messeage to contacts directly in the addressbook |stay in the application contacting them
+
+|`*` |user |know the location status of contacts |meet them on the street
+
+|`*` |user |sort by email |be easier to find contacts
 |=======================================================================
 
 {More to be added}
@@ -767,7 +925,113 @@ Use case ends.
 +
 Use case resumes at step 2.
 
-{More to be added}
+[discrete]
+=== Use case: Add person
+
+*MSS*
+
+1.  User requests to add person
+2.  AddressBook adds the person
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Person's name is not found in Addressbook.
+** 2a1. Person is not added to Addressbook.
++
+Use case ends.
+
+[discrete]
+=== Use case: View help command
+
+*MSS*
+
+1.  User requests to view help commands
+2.  AddressBook lists help commands
++
+Use case ends.
+
+[discrete]
+=== Use case: Edit contact
+
+*MSS*
+
+1.  User requests to edit contact
+2.  AddressBook updates the contact
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Person's name is not found in Addressbook.
+** 2a1. Contact is not edited.
++
+Use case ends.
+
+[none]
+* 2b. Person's name is found in Addressbook.
+** 2b1. Error message and ontact is not edited.
++
+Use case ends.
+
+[none]
+* 2c. No field changed.
+** 2c1. Error message and ontact is not edited.
++
+Use case ends.
+
+[discrete]
+=== Use case: List contact
+
+*MSS*
+
+1.  User requests to list contacts
+2.  AddressBook lists the contacts
++
+Use case ends.
+
+[discrete]
+=== Use case: Clear Addressbook
+
+*MSS*
+
+1.  User requests to clear Addressbook
+2.  AddressBook clears the contacts
++
+Use case ends.
+
+[discrete]
+=== Use case: find contact
+
+*MSS*
+
+1.  User requests to find 2 different names
+2.  AddressBook lists the contacts found
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Both persons' names are not found in Addressbook.
+** 2a1. No contact listed.
++
+Use case ends.
+
+[none]
+* 2b. Only one person's name is found in Addressbook.
+** 2b1. Only contact found is listed.
++
+Use case ends.
+
+[none]
+* 2c. Names are incomplete.
+** 2c1. No contact listed.
++
+Use case ends.
 
 [appendix]
 == Non Functional Requirements
@@ -775,6 +1039,12 @@ Use case resumes at step 2.
 .  Should work on any link:#mainstream-os[mainstream OS] as long as it has Java `1.8.0_60` or higher installed.
 .  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 .  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+.  The application only support in English.
+.  The application file size is limited to a max of 30MB.
+.  The system should be backward compatible with the data produced by earlier version of the system.
+.  System requirement: the application can work on window 10.1 or later and Mac OS 10.12 or later.
+.  The project development time should not be more than 6 weeks
+.  This addressbook application is open source.
 
 {More to be added}
 
@@ -795,6 +1065,54 @@ Private contact detail
 A contact detail that is not meant to be shared with others
 ....
 
+[[GUI]]
+GUI
+
+...
+A graphical user interface that allows visual interaction with the computer
+...
+
+[[platform/resolution-specific-idiosyncrasies]
+Platform/Resolution specific idiosyncrasies
+
+...
+Peculiar software behaviour specific to the operating system
+...
+
+[[headless-mode]]
+Headless mode
+
+...
+A mode without requiring the use of a graphical user interface
+...
+
+[[Continuous-Integration]]
+Continuous Integration
+
+...
+Producing a clean build of the project frequently
+...
+
+[[throw-an-Exception]]
+Throw an Exception
+
+...
+A function indicates to a user that an exception has occurred depending on the input
+...
+
+[[Use-Cases]]
+Use Cases
+
+...
+The interactions that happen between the user and the application to achieve a specific end result
+...
+
+[[Non-functional-requirements]]
+Non Functional Requirements
+
+...
+A requirement that describes how a system works
+...
 [appendix]
 == Product Survey
 
