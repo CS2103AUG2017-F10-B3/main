@@ -1,7 +1,10 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.commands.SortCommand.MESSAGE_EMPTY;
+import static seedu.address.logic.commands.SortName.OPTION_NAME;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,12 +13,15 @@ import org.fxmisc.easybind.EasyBind;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.CollectionUtil;
+import seedu.address.logic.commands.SortAddress;
+import seedu.address.logic.commands.SortName;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 
 /**
  * A list of persons that enforces uniqueness between its elements and does not allow nulls.
- *
+ * <p>
  * Supports a minimal set of list operations.
  *
  * @see Person#equals(Object)
@@ -49,10 +55,28 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Sorts the addressbook base on selected option
+     *
+     * @param option
+     * @throws AddressBookIsEmpty
+     */
+    public void sort(int option) throws AddressBookIsEmpty {
+        if (!internalList.isEmpty()) {
+            if (option == OPTION_NAME) {
+                Collections.sort(internalList, new SortName());
+            } else {
+                Collections.sort(internalList, new SortAddress());
+            }
+        } else {
+            throw new AddressBookIsEmpty();
+        }
+    }
+
+    /**
      * Replaces the person {@code target} in the list with {@code editedPerson}.
      *
      * @throws DuplicatePersonException if the replacement is equivalent to another existing person in the list.
-     * @throws PersonNotFoundException if {@code target} could not be found in the list.
+     * @throws PersonNotFoundException  if {@code target} could not be found in the list.
      */
     public void setPerson(ReadOnlyPerson target, ReadOnlyPerson editedPerson)
             throws DuplicatePersonException, PersonNotFoundException {
@@ -112,11 +136,20 @@ public class UniquePersonList implements Iterable<Person> {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof UniquePersonList // instanceof handles nulls
-                        && this.internalList.equals(((UniquePersonList) other).internalList));
+                && this.internalList.equals(((UniquePersonList) other).internalList));
     }
 
     @Override
     public int hashCode() {
         return internalList.hashCode();
+    }
+
+    /**
+     * Exception gets thrown if the addressbook is empty.
+     */
+    public static class AddressBookIsEmpty extends CommandException {
+        protected AddressBookIsEmpty() {
+            super(MESSAGE_EMPTY);
+        }
     }
 }

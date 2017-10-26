@@ -41,6 +41,21 @@ public class StringUtil {
         return false;
     }
 
+    public static boolean startWithCharIgnoreCase(String sentence, String chars) {
+        requireNonNull(sentence);
+        requireNonNull(chars);
+
+        String preppedChars = chars.trim();
+        checkArgument(!preppedChars.isEmpty(), "Word parameter cannot be empty");
+        checkArgument(preppedChars.split("\\s+").length == 1, "Word parameter should be a single word");
+        String regex = String.format("^" + chars + ".*$");
+
+        if (sentence.matches(regex)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Returns a detailed message of the t, including the stack trace.
      */

@@ -22,12 +22,12 @@ endif::[]
 ** A more sophisticated GUI that includes a list  panel and an in-built Browser.
 ** More test cases, including automated GUI testing.
 ** Support for _Build Automation_ using Gradle and for _Continuous Integration_ using Travis CI.
+*** Team F10-B3 now upgrades the Address Book to become user-friendly for daily usage of young people.
 
 == Site Map
 
 * <<UserGuide#, User Guide>>
 * <<DeveloperGuide#, Developer Guide>>
-* <<LearningOutcomes#, Learning Outcomes>>
 * <<AboutUs#, About Us>>
 * <<ContactUs#, Contact Us>>
 
@@ -35,5 +35,6 @@ endif::[]
 
 * Some parts of this sample application were inspired by the excellent http://code.makery.ch/library/javafx-8-tutorial/[Java FX tutorial] by
 _Marco Jakob_.
+* AddressBook-Level4 project created by SE-EDU initiative at https://github.com/se-edu/
 
 == Licence : link:LICENSE[MIT]
