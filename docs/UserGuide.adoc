@@ -12,7 +12,7 @@ ifdef::env-github[]
 endif::[]
 :repoURL: https://github.com/CS2103AUG2017-F10-B3/main.git
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `Team F10-B3`      Since: `Jun 2016`      Licence: `MIT`
 
 == Quick Start
 
@@ -177,6 +177,8 @@ Deletes the 2nd person in the address book.
 * `find Betsy` +
 `delete 1` +
 Deletes the 1st person in the results of the `find` command.
+
+
 
 === Selecting a person : `select`
 
