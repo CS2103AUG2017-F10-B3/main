@@ -251,6 +251,11 @@ Why it is implemented this way: This approach was chosen as it is as it is the m
 The find email mechanism is facilitated by regex. After finding matches, result will be stored in the filtered list that is showing on the UI.
 Further improvement might include allowing user to use flag(e.g. findEmail \f KEYWORD) to do advance search.
 
+=== Add change theme mechanism
+
+The change theme mechanism is implemented in the GUI level. By clicking the menu item "Dark theme" or "Light theme", it triggers an internal function "setTheme" and change the theme accordingly.
+
+-`The findByLetter Implementation`;
 
 === Add findPhone mechanism
 

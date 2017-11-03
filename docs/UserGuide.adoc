@@ -55,6 +55,10 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 Format: `help`
 
+=== Changing theme : `Dark theme` / `Light theme`
+
+Change the UI theme when the user click "File > ____ theme"
+
 === Adding a person: `add`
 
 Adds a person to the address book +
