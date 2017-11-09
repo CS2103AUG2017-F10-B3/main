@@ -1,5 +1,6 @@
 package seedu.address;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.TextField;
@@ -10,8 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+
 //@@author henryheyhey92
 public class LoginBox {
+
     private static boolean answer;
     private static Stage window = new Stage();
     private static TextField nameInput = new TextField();
@@ -49,6 +52,11 @@ public class LoginBox {
         Button yesButton = new Button("Login");
         GridPane.setConstraints(yesButton, 2, 4);
 
+        window.setOnCloseRequest(e -> {
+            e.consume();
+            stop();
+        });
+
         yesButton.setOnAction(LoginBox::handle);
 
         //Add buttons
@@ -60,6 +68,16 @@ public class LoginBox {
         return answer;
         //Clicking will set answer and cloe window
     }
+
+    private static void stop() {
+        boolean answer = ConfirmBox.display("Exit Check Protocol","Confirm on exiting the program?");
+
+        if(answer) {
+            Platform.exit();
+            System.exit(0);
+        }
+    }
+
     private static boolean isInt(TextField name, TextField pass){
         String name2 = name.getText();
         String pass2 = pass.getText();
