@@ -78,18 +78,27 @@ Examples:
 === Sorting the addressbook: `sort`
 
 Sorts the addressbook by address or by name.User can specify if they want to save the sorted state. +
-Format: `s OPTION SAVE_OPTION`
+Format: `sort OPTION SAVE_OPTION` , for quick input use the letter `s` instead of `sort`.
 
 ****
-* OPTION keyword allows user to select to sort by name or address.
-* SAVE_OPTION keyword allows user to save the sorted state of the addressbook base on preference.
+* OPTION keyword allows the user to select whether to sort the addressbook by name or by address.
+* SAVE_OPTION keyword allows the user to save the sorted state of the addressbook and it is an optional input.
+* The sort command is tied to the undo/redo mechanism to facilitate convenience in the event the user enters the wrong sort option.
+* To change or edit the lookup table data, locate the .csv file in `\main\src\main\resources\tables` folder and do the necessary changes on the file.
+* All changes to the .csv file have to conform to the present format which is each value starts on a new line.
+* *DO NOT RENAME THE FILE OR CHANGE THE FILE LOCATION BEFORE BUILDING THE JAR FILE.*
 ****
 
 Examples:
 
-* To sort by name use `n`. Example `s n`.
-* To sort by address use `a`. Example `s a`.
-* To sort by name and save use `se`. Example `s n se`.
+* `s n` +
+Sorts the addressbook by name alphabetically.
+* `sort a` +
+Sorts the addressbook by address, in particular by the street name.
+* `s n se` +
+Sorts the addressbook by name and saves the sorted state of the addressbook.
+* `s n` followed by `undo` +
+Sorts the addressbook by name alphabetically.The next input undoes the sort reverting the addressbook to the previous state.
 // end::sort[]
 
 === Listing all persons : `list`
@@ -111,23 +120,28 @@ Format: `listTags [f]`
 ***
 // end::listTags[]
 
-// tag::copy[]
+//tag::copy[]
 === Copying person's information over to system clipboard : `copy`
 
 Copies the selected person's information over to the system clipboard.
-Format: `c INDEX CHOICE`
+Format: `copy INDEX [CHOICE]` , for quick input use the letter `c` instead of `copy`.
 
 ****
-* Both fields after input `c` must be provided.
+* Both fields after commnad word input `copy` or `c` must be provided.
+* To access the copied data, simply use `ctrl v` to paste the copied data.
 ****
 
 Examples:
 
-* To copy a person's name append the letter `n` after INDEX. Example 'c 1 n'.
-* To copy a person's phone append the letter `p` after INDEX. Example 'c 1 p'.
-* To copy a person's email append the letter `e` after INDEX. Example 'c 1 e'.
-* To copy a person's address append the letter `a` after INDEX. Example 'c 1 a'.
-// end::copy[]
+* `c 1 n` +
+Copies the topmost person's name.
+* `c 2 p` +
+Copies the second topmost person's phone number.
+* `copy 2 e` +
+Copies the second topmost person's email.
+* `copy 2 a` +
+Copies the second topmost person's address.
+//end::copy[]
 
 === Editing a person : `edit`
 
