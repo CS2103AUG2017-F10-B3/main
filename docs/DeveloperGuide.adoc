@@ -216,33 +216,212 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 == Implementation
 
-// tag::sort[]
-=== Sort Command mechanism
+// tag::sortName[]
+=== Sort by name  mechanism
 
-How is it implemented: Sorting by name is done using the Java comparator with the compare method overridden
-in the SortName class. Comparison is via using the method compareToIgnoreCase(). For v1.5, street names in Singapore
-has been added into a csv file for easy manipulaition of table data if need be. The AddressData class is responsible for
-extracting the data from the csv file to the arraylist look-up table. A person's address will be checked against the table
-and the table value would be used for comparison.
+The sorting by name mechanism is facilitated by implementing a comparator followed by overriding the compare method in
+the java class.The compare method is overridden in the Java class in this way:
+----
+public class SortName implements Comparator<ReadOnlyPerson> {
+    @Override
+    public int compare(ReadOnlyPerson a, ReadOnlyPerson b) {
+      return a.getName().fullName.compareToIgnoreCase(b.getName().fullName);
+    }
+}
+----
+Suppose the user has just launched the application and executes a new `SortCommand` `sort n` to sort the addressbook by name.
+A new `SortCommand` parser object would be first instantiated which parsers the user's arguments and returns a new `SortCommand` object.
+Base on the inheritance diagram below a new SortName object is instantiated from the SortCommand class.
 
-Why it is implemented this way: Sort by name is straightforward using the standard sorting approach however sorting
-by addresses is far more complicated. Using a lookup table offers a definite sorting approach as compared to other
-approaches as for now standard user input for address cannot be guaranteed. However if this should change in the later
-stages, this approach may be reassessed for suitability.
+image::sortInheritance.png[width="250"]
 
-Alternatives Considered:
--Java regex
-// end::sort[]
+From within the `SortName` object the `sortAddressBook()` method than gets called which resides in the `ModelManager` class.
+The method is implemented this way:
+----
+ public synchronized void sortAddressBook(int option, int saveOption) {
+        addressBook.sort(option);
+        updateFilteredPersonList(sortListPredicate);
+        if (saveOption == SAVE) {
+            indicateAddressBookChanged();
+        }
+    }
+----
+The parameter `option` being the user's choice to sort by name or address and `saveOption` being the user's choice for saving
+the addressbook state.
+[NOTE]
+updateFilteredPersonList(sortListPredicate) is to ensure only the previously shown persons are shown after the command is executed.
 
+Due to the many layers in place, the `sort` method has to be called which resides in the `AddressBook` class which simply just operates
+as a link to the `UniquePersonList` class where the actual sorting logic takes place. The method `sort` within the `UniquePersonList` class
+is implemented this way:
+----
+public void sort(int option) throws AddressBookIsEmpty, LoadLookUpTableException {
+        try {
+            if (!internalList.isEmpty()) {
+                if (option == OPTION_NAME) {
+                    Collections.sort(internalList, new SortName());
+                } else {
+                    Collections.sort(internalList, new SortAddress());
+                }
+            } else {
+                throw new AddressBookIsEmpty();
+            }
+        } catch (IOException e) {
+            throw new LoadLookUpTableException();
+        }
+    }
+----
+[NOTE]
+AddressBookIsEmpty exception gets thrown if the user has cleared the addressbook and is attempting a sort command.
+[NOTE]
+LoadLookUpTable exception can be ignored for now as it would be explained in the next segment.
+
+As shown, sorting is done with using the Java API method `Collections.sort()`. The below diagram summarizes the entire
+command execution from the start to finish.
+
+image::editSortName.png[width="800"]
+// end::sortName[]
+
+// tag::sortAddress[]
+=== Sort by address mechanism
+
+The sorting by address mechanism is backed by an Arraylist lookup table and is facilitated by implementing a comparator
+followed by overriding the compare method in the java class.The compare method is overridden in the Java class in this way:
+----
+public class SortAddress implements Comparator<ReadOnlyPerson> {
+   @Override
+   public int compare(ReadOnlyPerson a, ReadOnlyPerson b) {
+           String compareFirst = "";
+           String compareSecond = "";
+           Boolean firstAddressFound = false;
+           Boolean secondAddressFound = false;
+
+           for (String compare : table) {
+               if (a.getAddress().value.toLowerCase().contains(compare.toLowerCase())) {
+                   compareFirst = compare;
+                   firstAddressFound = true;
+               }
+           }
+
+           for (String compare : table) {
+               if (b.getAddress().value.toLowerCase().contains(compare.toLowerCase())) {
+                   compareSecond = compare;
+                   secondAddressFound = true;
+               }
+           }
+
+           if (firstAddressFound == false) {
+               return 1;
+           }
+
+           if (secondAddressFound == false) {
+               return -1;
+           }
+
+           return compareFirst.compareToIgnoreCase(compareSecond);
+       }
+}
+----
+
+The two enhanced `for` loop is for comparison against the lookup table and should a match be made, the street name is noted
+down for comparison later. The two boolean values are to note whether a match can be found in the lookup table. In the event
+no match can be found, the person would get "pushed" to the bottom of the shown list. Hence a value of 1 or -1 is returned for
+either if their boolean variable equates to `false`.
+
+[NOTE]
+The present data for the lookup table only contains the street names of Singapore.
+
+To load the date into the ArrayList a utility class `AddressData` is used to parse inputs from the .csv file which
+contains all the lookup table data its implementation is as follows:
+----
+public class AddressData {
+
+    private static BufferedReader br;
+    private static String line;
+    private static ArrayList<String> table = new ArrayList<>();
+
+    public static void initTable() throws IOException {
+        InputStream in = MainApp.class.getResourceAsStream("/tables/data.csv");
+        br = new BufferedReader(new InputStreamReader(in));
+        while ((line = br.readLine()) != null) {
+            table.add(line.trim());
+        }
+    }
+
+    public static ArrayList<String> getTable() {
+        return table;
+    }
+}
+----
+[NOTE]
+LoadLookUpTable exception get thrown in the event an error occurs while reading in data from the .csv file.
+
+When a new SortAddress object is instantiated both the methods `initTable()` and `getTable()` gets called attached below
+shows them getting called under the default constructor `SortAddress()`:
+----
+public class SortAddress implements Comparator<ReadOnlyPerson> {
+    public SortAddress() throws IOException {
+        AddressData.initTable();
+        table = AddressData.getTable();
+    }
+}
+----
+Association diagram:
+
+image::inheritanceV2.png[width="250"]
+
+The command flow that happens after the user executes a new `SortCommand` `sort a` is the same as described in the SortName
+mechanism the only thing that varies are the arguments. The `sortAddressBook()` method gets called within the `SortAddress` class
+which leads to the `sort` method in the `Addressbook` class being called followed by the the `sort` method being called last in the
+`UniqueuePersonList` class where the actual sorting takes place.
+// end::sortAddress[]
+
+// tag::copy[]
 === Copy Command mechanism
 
-Overview: The copy command is to copy the desired field of a person over to the system clipboard.
+The copy command mechanism is backed by both the Java `Toolkit` class as well as the system clipboard. The
+copy method which resides in the `ModelManager` class and is implemented this way:
+----
+    public void copy(ReadOnlyPerson person, String choice) {
+        Person target = new Person(person);
+        StringSelection sel;
 
-How is it implemented: Copying is done by instantiating an instance of Toolkit as copying over to the system
-clipboard involves querying the operating system directly to get a reference to the system clipboard. StringSelection
-is used as the target field has to be transferred which is supported by StingSelection as it implements Transferable.
+        switch (choice) {
+        case CHOICE_NAME:
+            sel = new StringSelection(target.getName().fullName);
+            clipboard.setContents(sel, null);
+            break;
 
-Why it is implemented this way: This approach was chosen as it is as it is the most straightforward way
+        case CHOICE_PHONE:
+            sel = new StringSelection(target.getPhone().value);
+            clipboard.setContents(sel, null);
+            break;
+
+        case CHOICE_EMAIL:
+            sel = new StringSelection(target.getEmail().value);
+            clipboard.setContents(sel, null);
+            break;
+
+        case CHOICE_ADDRESS:
+            sel = new StringSelection(target.getAddress().value);
+            clipboard.setContents(sel, null);
+            break;
+
+        default:
+            break;
+        }
+    }
+----
+
+Suppose the user has just launched the application and executes a new `CopyCommand` `copy 1 n`. A new `CopyCommand` parser object would be first instantiated which
+parsers the user's arguments and returns a new `CopyCommand` object. The method `copy` gets called and according to the user's choice copies
+over to the system clipboard the appropriate data via getter methods. `StringSelection` is used as it implements the `Transferable` interface which is appropriate for
+this situation. To access the copied data just use `ctrl v`.
+
+Attached below is a diagram which describes the entire command execution from the start to finish.
+
+image::copyexecution.png[width="800"]
+// end::copy[]
 
 === findEmail Command mechanism
 
@@ -307,6 +486,9 @@ A person's birthday can be added/changed via the GUI. This ensures that the inpu
 a standard format. In this situation, since the Label has to change whenever a new date is picked from the date picker
 a bidirectional binding is used instead of the normal binding.
 
+image::birthdaypicker.png[width="800"]
+
+=======
 // tag::gAddress[]
 === Search for address on Google Maps
 An improvement from searching address on Google Maps by selecting panel; converted to CLI form.

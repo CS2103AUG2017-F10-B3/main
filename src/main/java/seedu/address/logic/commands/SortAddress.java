@@ -56,6 +56,7 @@ public class SortAddress extends SortCommand implements Comparator<ReadOnlyPerso
             if (a.getAddress().value.toLowerCase().contains(compare.toLowerCase())) {
                 compareFirst = compare;
                 firstAddressFound = true;
+                break;
             }
         }
 
@@ -63,6 +64,7 @@ public class SortAddress extends SortCommand implements Comparator<ReadOnlyPerso
             if (b.getAddress().value.toLowerCase().contains(compare.toLowerCase())) {
                 compareSecond = compare;
                 secondAddressFound = true;
+                break;
             }
         }
 
