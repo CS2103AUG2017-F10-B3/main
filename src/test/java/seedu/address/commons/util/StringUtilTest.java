@@ -137,6 +137,21 @@ public class StringUtilTest {
         assertTrue(StringUtil.containsWordIgnoreCase("AAA bBb ccc  bbb", "bbB"));
     }
 
+    //---------------- Tests for containsAny --------------------------------------
+
+    //@@author Labradorites
+    /*
+     * Invalid equivalence partitions for word: null, empty, multiple words
+     * Invalid equivalence partitions for sentence: null
+     * The four test cases below test one invalid input at a time.
+     */
+    @Test
+    public void containsAny_validInputs_correctResult() {
+        // Matches multiple words in sentence
+        assertTrue(StringUtil.containsAny("111 222 333  444", "222"));
+    }
+    //@@author
+
     //---------------- Tests for getDetails --------------------------------------
 
     /*

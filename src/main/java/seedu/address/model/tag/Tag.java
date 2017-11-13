@@ -29,6 +29,15 @@ public class Tag {
         this.tagName = trimmedName;
     }
 
+    //@@author Labradorites
+    /*
+     * Returns tag name.
+     */
+    public String getTagName() {
+        return tagName;
+    }
+    //@@author
+
     /**
      * Returns true if a given string is a valid tag name.
      */

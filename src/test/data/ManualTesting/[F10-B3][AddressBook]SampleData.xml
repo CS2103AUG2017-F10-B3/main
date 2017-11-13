@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addressbook>
+    <persons>
+        <name>aaron lee</name>
+        <phone>95678976</phone>
+        <email>aaron@gmail.com</email>
+        <address>Blk 17 Bedok South Avenue 1 , #02-01</address>
+        <birthday>DOB not initialised</birthday>
+        <tagged>classmates</tagged>
+    </persons>
+    <persons>
+        <name>Alex Yeoh</name>
+        <phone>87438807</phone>
+        <email>alexyeoh@example.com</email>
+        <address>Blk 30 Geylang East Avenue 1, #06-40</address>
+        <birthday>05/08/1994</birthday>
+        <tagged>friends</tagged>
+    </persons>
+    <persons>
+        <name>Bernice Yu</name>
+        <phone>99272758</phone>
+        <email>berniceyu@example.com</email>
+        <address>46 Geylang Bahru, #07-18</address>
+        <birthday>03/07/1965</birthday>
+        <tagged>colleagues</tagged>
+        <tagged>friends</tagged>
+    </persons>
+    <persons>
+        <name>Charlotte Oliveiro</name>
+        <phone>93210283</phone>
+        <email>charlotte@example.com</email>
+        <address>Blk 11 Ang Mo Kio Street 23, #11-04</address>
+        <birthday>02/04/1978</birthday>
+        <tagged>neighbours</tagged>
+    </persons>
+    <persons>
+        <name>David Li</name>
+        <phone>91031282</phone>
+        <email>lidavid@example.com</email>
+        <address>Blk 436 Serangoon North Avenue 1, #16-43</address>
+        <birthday>01/04/1974</birthday>
+        <tagged>family</tagged>
+    </persons>
+    <persons>
+        <name>Fan yuting</name>
+        <phone>87674567</phone>
+        <email>yuting@downside.com</email>
+        <address>Queen's Avenue 3, #07-08</address>
+        <birthday>DOB not initialised</birthday>
+        <tagged>mother</tagged>
+    </persons>
+    <persons>
+        <name>Fann Wong</name>
+        <phone>87654567</phone>
+        <email>wongkaykay@src.com</email>
+        <address>2 king's road,#02-143</address>
+        <birthday>1/11/1951</birthday>
+        <tagged>father</tagged>
+    </persons>
+    <persons>
+        <name>Henry Lee</name>
+        <phone>98456734</phone>
+        <email>hellohello@gmail.com</email>
+        <address>Bedok South Avenue 2, #15-341</address>
+        <birthday>11/11/1992</birthday>
+        <tagged>family</tagged>
+    </persons>
+    <persons>
+        <name>Irfan Ibrahim</name>
+        <phone>92492021</phone>
+        <email>irfan@example.com</email>
+        <address>Serangoon North Avenue 6, #02-01</address>
+        <birthday>05/04/1955</birthday>
+        <tagged>classmates</tagged>
+    </persons>
+    <persons>
+        <name>Jane Doe</name>
+        <phone>98764567</phone>
+        <email>heyhey_92@livewire.com</email>
+        <address>Blk 117 Kaki Bukit Avenue 5 #01-02</address>
+        <birthday>9/11/1954</birthday>
+        <tagged>bestfriend</tagged>
+    </persons>
+    <persons>
+        <name>John Doe</name>
+        <phone>65670377</phone>
+        <email>dope@singnet.com</email>
+        <address>100 Lim chu Kang road</address>
+        <birthday>DOB not initialised</birthday>
+        <tagged>brother</tagged>
+    </persons>
+    <persons>
+        <name>peter lim</name>
+        <phone>56753426</phone>
+        <email>manutd@live.com</email>
+        <address>10 Hertford Road, #09-01</address>
+        <birthday>10/4/1968</birthday>
+        <tagged>friend</tagged>
+    </persons>
+    <persons>
+        <name>Roy Balakrishnan</name>
+        <phone>92624417</phone>
+        <email>royb@example.com</email>
+        <address>Blk 45 Aljunied Avenue 3, #11-31</address>
+        <birthday>08/03/1962</birthday>
+        <tagged>colleagues</tagged>
+    </persons>
+    <persons>
+        <name>Xiao Li</name>
+        <phone>98452345</phone>
+        <email>bluemoon@hotmail.com</email>
+        <address>Blk 10, Havelock Road, Singapore 678234</address>
+        <birthday>7/5/1990</birthday>
+        <tagged>family</tagged>
+    </persons>
+    <persons>
+        <name>Xiao Ming</name>
+        <phone>76543456</phone>
+        <email>xiaoming@hotmail.com</email>
+        <address>Blk 57, Bishan Lane,Singapore 234378</address>
+        <birthday>DOB not initialised</birthday>
+        <tagged>projectmate</tagged>
+    </persons>
+    <persons>
+        <name>Lucy Lee</name>
+        <phone>88312230</phone>
+        <email>loosee@hotmail.com</email>
+        <address>Blk 90, Toa Payoh,Singapore 255532</address>
+        <birthday>DOB not initialised</birthday>
+        <tagged>friend</tagged>
+    </persons>
+    <persons>
+        <name>Lucy Liu</name>
+        <phone>91201299</phone>
+        <email>liulucy@hotmail.com</email>
+        <address>Blk 66, Aljunied, Singapore 543210</address>
+        <birthday>7/3/1980</birthday>
+        <tagged>family</tagged>
+    </persons>
+    <persons>
+        <name>Brandon Tan</name>
+        <phone>89237812</phone>
+        <email>bbtandon@hotmail.com</email>
+        <address>Blk 5, Lorong Chuan, Singapore 544653</address>
+        <birthday>9/9/1993</birthday>
+        <tagged>friends</tagged>
+    </persons>
+    <persons>
+        <name>Joanne Peh</name>
+        <phone>89991113</phone>
+        <email>pehpehjo@hotmail.com</email>
+        <address>Blk 12, Caldecott Hill, Singapore 345019</address>
+        <birthday>8/7/1988</birthday>
+        <tagged>colleagues</tagged>
+    </persons>
+    <persons>
+        <name>Bruce Lee</name>
+        <phone>88559826</phone>
+        <email>woohaah@hotmail.com</email>
+        <address>Blk 34, Marine Parade, Singapore 572438</address>
+        <birthday>7/7/1977</birthday>
+        <tagged>family</tagged>
+    </persons>
+    <tags>mother</tags>
+    <tags>colleagues</tags>
+    <tags>father</tags>
+    <tags>projectmate</tags>
+    <tags>friend</tags>
+    <tags>classmates</tags>
+    <tags>neighbours</tags>
+    <tags>family</tags>
+    <tags>brother</tags>
+    <tags>friends</tags>
+    <tags>bestfriend</tags>
+</addressbook>

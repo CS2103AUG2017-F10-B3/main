@@ -10,7 +10,7 @@ ifdef::env-github[]
 :note-caption: :information_source:
 endif::[]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
-:repoURL: https://github.com/se-edu/addressbook-level4/tree/master
+:repoURL: https://github.com/CS2103AUG2017-F10-B3/main.git
 
 By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
 
@@ -216,7 +216,387 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 == Implementation
 
-This section describes some noteworthy details on how certain features are implemented.
+// tag::sortName[]
+=== Sort by name  mechanism
+
+The sorting by name mechanism is facilitated by implementing a comparator followed by overriding the compare method in
+the java class.The compare method is overridden in the Java class in this way:
+----
+public class SortName implements Comparator<ReadOnlyPerson> {
+    @Override
+    public int compare(ReadOnlyPerson a, ReadOnlyPerson b) {
+      return a.getName().fullName.compareToIgnoreCase(b.getName().fullName);
+    }
+}
+----
+Suppose the user has just launched the application and executes a new `SortCommand` `sort n` to sort the addressbook by name.
+A new `SortCommand` parser object would be first instantiated which parsers the user's arguments and returns a new `SortCommand` object.
+Base on the inheritance diagram below a new SortName object is instantiated from the SortCommand class.
+
+image::sortInheritance.png[width="250"]
+
+From within the `SortName` object the `sortAddressBook()` method than gets called which resides in the `ModelManager` class.
+The method is implemented this way:
+----
+ public synchronized void sortAddressBook(int option, int saveOption) {
+        addressBook.sort(option);
+        updateFilteredPersonList(sortListPredicate);
+        if (saveOption == SAVE) {
+            indicateAddressBookChanged();
+        }
+    }
+----
+The parameter `option` being the user's choice to sort by name or address and `saveOption` being the user's choice for saving
+the addressbook state.
+[NOTE]
+updateFilteredPersonList(sortListPredicate) is to ensure only the previously shown persons are shown after the command is executed.
+
+Due to the many layers in place, the `sort` method has to be called which resides in the `AddressBook` class which simply just operates
+as a link to the `UniquePersonList` class where the actual sorting logic takes place. The method `sort` within the `UniquePersonList` class
+is implemented this way:
+----
+public void sort(int option) throws AddressBookIsEmpty, LoadLookUpTableException {
+        try {
+            if (!internalList.isEmpty()) {
+                if (option == OPTION_NAME) {
+                    Collections.sort(internalList, new SortName());
+                } else {
+                    Collections.sort(internalList, new SortAddress());
+                }
+            } else {
+                throw new AddressBookIsEmpty();
+            }
+        } catch (IOException e) {
+            throw new LoadLookUpTableException();
+        }
+    }
+----
+[NOTE]
+AddressBookIsEmpty exception gets thrown if the user has cleared the addressbook and is attempting a sort command.
+[NOTE]
+LoadLookUpTable exception can be ignored for now as it would be explained in the next segment.
+
+As shown, sorting is done with using the Java API method `Collections.sort()`. The below diagram summarizes the entire
+command execution from the start to finish.
+
+image::editSortName.png[width="800"]
+// end::sortName[]
+
+// tag::sortAddress[]
+=== Sort by address mechanism
+
+The sorting by address mechanism is backed by an Arraylist lookup table and is facilitated by implementing a comparator
+followed by overriding the compare method in the java class.The compare method is overridden in the Java class in this way:
+----
+public class SortAddress implements Comparator<ReadOnlyPerson> {
+   @Override
+   public int compare(ReadOnlyPerson a, ReadOnlyPerson b) {
+           String compareFirst = "";
+           String compareSecond = "";
+           Boolean firstAddressFound = false;
+           Boolean secondAddressFound = false;
+
+           for (String compare : table) {
+               if (a.getAddress().value.toLowerCase().contains(compare.toLowerCase())) {
+                   compareFirst = compare;
+                   firstAddressFound = true;
+               }
+           }
+
+           for (String compare : table) {
+               if (b.getAddress().value.toLowerCase().contains(compare.toLowerCase())) {
+                   compareSecond = compare;
+                   secondAddressFound = true;
+               }
+           }
+
+           if (firstAddressFound == false) {
+               return 1;
+           }
+
+           if (secondAddressFound == false) {
+               return -1;
+           }
+
+           return compareFirst.compareToIgnoreCase(compareSecond);
+       }
+}
+----
+
+The two enhanced `for` loop is for comparison against the lookup table and should a match be made, the street name is noted
+down for comparison later. The two boolean values are to note whether a match can be found in the lookup table. In the event
+no match can be found, the person would get "pushed" to the bottom of the shown list. Hence a value of 1 or -1 is returned for
+either if their boolean variable equates to `false`.
+
+[NOTE]
+The present data for the lookup table only contains the street names of Singapore.
+
+To load the date into the ArrayList a utility class `AddressData` is used to parse inputs from the .csv file which
+contains all the lookup table data its implementation is as follows:
+----
+public class AddressData {
+
+    private static BufferedReader br;
+    private static String line;
+    private static ArrayList<String> table = new ArrayList<>();
+
+    public static void initTable() throws IOException {
+        InputStream in = MainApp.class.getResourceAsStream("/tables/data.csv");
+        br = new BufferedReader(new InputStreamReader(in));
+        while ((line = br.readLine()) != null) {
+            table.add(line.trim());
+        }
+    }
+
+    public static ArrayList<String> getTable() {
+        return table;
+    }
+}
+----
+[NOTE]
+LoadLookUpTable exception get thrown in the event an error occurs while reading in data from the .csv file.
+
+When a new SortAddress object is instantiated both the methods `initTable()` and `getTable()` gets called attached below
+shows them getting called under the default constructor `SortAddress()`:
+----
+public class SortAddress implements Comparator<ReadOnlyPerson> {
+    public SortAddress() throws IOException {
+        AddressData.initTable();
+        table = AddressData.getTable();
+    }
+}
+----
+Association diagram:
+
+image::inheritanceV2.png[width="250"]
+
+The command flow that happens after the user executes a new `SortCommand` `sort a` is the same as described in the SortName
+mechanism the only thing that varies are the arguments. The `sortAddressBook()` method gets called within the `SortAddress` class
+which leads to the `sort` method in the `Addressbook` class being called followed by the the `sort` method being called last in the
+`UniqueuePersonList` class where the actual sorting takes place.
+// end::sortAddress[]
+
+// tag::copy[]
+=== Copy Command mechanism
+
+The copy command mechanism is backed by both the Java `Toolkit` class as well as the system clipboard. The
+copy method which resides in the `ModelManager` class and is implemented this way:
+----
+    public void copy(ReadOnlyPerson person, String choice) {
+        Person target = new Person(person);
+        StringSelection sel;
+
+        switch (choice) {
+        case CHOICE_NAME:
+            sel = new StringSelection(target.getName().fullName);
+            clipboard.setContents(sel, null);
+            break;
+
+        case CHOICE_PHONE:
+            sel = new StringSelection(target.getPhone().value);
+            clipboard.setContents(sel, null);
+            break;
+
+        case CHOICE_EMAIL:
+            sel = new StringSelection(target.getEmail().value);
+            clipboard.setContents(sel, null);
+            break;
+
+        case CHOICE_ADDRESS:
+            sel = new StringSelection(target.getAddress().value);
+            clipboard.setContents(sel, null);
+            break;
+
+        default:
+            break;
+        }
+    }
+----
+
+Suppose the user has just launched the application and executes a new `CopyCommand` `copy 1 n`. A new `CopyCommand` parser object would be first instantiated which
+parsers the user's arguments and returns a new `CopyCommand` object. The method `copy` gets called and according to the user's choice copies
+over to the system clipboard the appropriate data via getter methods. `StringSelection` is used as it implements the `Transferable` interface which is appropriate for
+this situation. To access the copied data just use `ctrl v`.
+
+Attached below is a diagram which describes the entire command execution from the start to finish.
+
+image::copyexecution.png[width="800"]
+// end::copy[]
+
+=== findEmail Command mechanism
+
+The find email mechanism is facilitated by regex. After finding matches, result will be stored in the filtered list that is showing on the UI.
+Further improvement might include allowing user to use flag(e.g. findEmail f/ KEYWORD) to do advance search.
+
+=== theme Command mechanism
+
+The change theme mechanism is implemented in both command and GUI level by leveraging service bus. By typing command `theme light/dark` or clicking the menu item "Dark theme" or "Light theme", it triggers an internal function "setTheme" and change the theme accordingly.
+
+// tag::findPhone[]
+=== findPhone Command mechanism
+
+The findPhone mechanism is able to search for persons whose phone numbers contain any number being searched.
+
+Finds persons whose phones contain any of the given keywords. +
+Format: `findPhone KEYWORD [MORE_KEYWORDS]`
+
+As long as contact has phone number that contains KEYWORD [MORE_KEYWORDS], it will be matched and displayed.
+
+Java files that have been modified:
+- `PhoneContainsKeywordsPredicate.java`
+- `AddressBookParser.java`
+- `FindPhoneCommand`
+- `FindPhoneCommandParser`
+- Some test units have been updated.
+// end::findPhone[]
+
+// tag::findTag[]
+=== findTag Command mechanism
+
+The findTag mechanism is able to search for persons whose tags contain any keywords being searched.
+
+Finds persons whose tags contain any of the given keywords. +
+Format: `findTag KEYWORD [MORE_KEYWORDS]`
+
+As long as contact has tags that contains KEYWORD [MORE_KEYWORDS], it will be matched and displayed.
+
+Java files that have been modified:
+- `TagContainsKeywordsPredicate.java`: Newly created
+- `AddressBookParser.java`: Edited to include findTag command.
+- `FindTagCommand.java`: Newly created.
+- `FindTagCommandParser.java`: Newly created.
+- `Person.java` : Altered to get tags as a string.
+- `ReadOnlyPerson.java`: Altered to get tags as a string.
+// end::findTag[]
+
+=== xFind Command mechanism
+
+The xFind mechanism is able to search for persons whose Find persons whose (address / name / email / phone/ tag) (contain / start with) any of the given keywords.
+
+Format: `xFind [A/ N/ E/ P/ T/ a/ n/ e/ p/ t/] KEYWORD [MORE_KEYWORDS]`
+
+`A/` is for address search, `N/` is for name search, etc.
+Upper case letter indicates the search will look for result containing any of the given keywords.
+Lower case letter indicates the search will look for result starting with
+any of the given keywords.
+
+=== The add birthday mechanism
+
+A person's birthday can be added/changed via the GUI. This ensures that the input for a birthdate always conform to
+a standard format. In this situation, since the Label has to change whenever a new date is picked from the date picker
+a bidirectional binding is used instead of the normal binding.
+
+image::birthdaypicker.png[width="800"]
+
+=======
+// tag::gAddress[]
+=== Search for address on Google Maps
+An improvement from searching address on Google Maps by selecting panel; converted to CLI form.
+
+Searches for person's address on Google Maps by index in most recent listing. +
+Format: `gAddress INDEX`
+
+Person whose index is keyed in will have its address searched in the browser panel on Google Maps.
+// end::gAddress[]
+
+// tag::findletter[]
+=== The findByLetter Implementation
+
+Find all person that is related to the input character.
+Key idea:
+
+(1)is to compare the input letter with the names in the list and display
+the results.
+
+(2) exact the first letter of every name in the list for comparison.
+
+Java file has been modified;
+
+-`NameContainsKeywordPredicate.java`; for the if else statement.
+
+-`AddressBookParser.java`; for the case.
+
+-`FindCommandLetter.java`(*newly created); for the find letter command.
+// end::findletter[]
+
+// tag::listTags[]
+=== The listTags implementation
+
+`listTags` is able to seive out all unique tags that can be found in the AddressBook. ` f` can be appended to list unique tags of persons currently listed in the PersonListPanel.
+`listTags` does not display duplicate tags that are tagged to the contacts in the AddressBook and is sorted alphabetically.
+`listTags f` displays a list of unique tags of persons currently shown in the PersonListPanel.
+
+Java files that have been modified:
+- 'Model': Modified to include a signature in the Model interface for the getFilteredTagsList(), getNormalTagsList() method. Takes in no parameter and returns a List<Tag>. getTagsListAsString() is added to retrieve the list of tags as String.
+- 'ModelManager': Modified to include the  getFilteredTagsList() and getNormalTagsList() methods that takes in no parameter and returns a List<Tag> that contains all tags. getTagsListAsString() takes in a List<Tag> and returns List<String>.
+- 'ListTagsCommand': Created to convert the List<Tag> to strings by calling the above functions and print the list of tags in the ResultsDisplay box.
+- 'Tag': modified to include an accessor for tagName.
+// end::listTags[]
+
+API : Logic.java
+
+Logic uses the AddressBookParser class to parse the user command.
+
+This results in a Command object which is executed by the LogicManager.
+
+The command execution can affect the Model (e.g. find a person) and/or raise events.
+
+The result of the command execution is encapsulated as a CommandResult object which is passed back to the Ui.
+
+Given below is the Sequence Diagram for interactions within the Logic component for the execute("Letter A") API call.
+
+image::FBL2.png[width="800"]
+
+=== Person number in list implementation
+
+feature has implemented, but writeup still in progress...
+
+// tag::exitcheck[]
+=== Program exit checker implementation
+
+This feature is to give the user a confirmation on closing the application.
+
+The files involved in the feature are, MainApp and ConfirmBox.
+Methods that are involved in buliding this feature is start() & stop().
+
+When user input exit command or click on the close button, the application will
+call out another window to ask the user's confirmation on closing the application.
+
+setOnCloseRequest will trigger when user close or exit the program.
+ConfirmBox will return true or false value of the user intention to close or continue on the program.
+
+image::exitprogramchecker.png[width="800"]
+
+The above is a illustration of how exit program funs.
+// end::exitcheck[]
+
+// tag::lock[]
+=== Passcode lock implementation
+
+The following implementation is to add security features to the application
+
+if user name & password matches the input, user get to access the application.
+
+-draft execution: will do a while loop in the MainApp class.
+
+image::Login.png[width="800"]
+// end::lock[]
+
+// tag::unlock[]
+=== Lock Command implementation
+
+The following implementation is to further enhance the security features of the application.
+When the keyword 'lock' is type onto the commandline textfield, it will lock and freeze the application from being use.
+
+It goes from LogicManager>AddressBookParser>LockCommand>LoginBox.java
+A success message would be return upon the unlock of the application.
+the execution method will return the message.
+
+the following is the implementation image.
+
+image::Lockcommand.png[width="800"]
+
+// end::unlock[]
 
 // tag::undoredo[]
 === Undo/Redo mechanism
@@ -721,17 +1101,65 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 [width="59%",cols="22%,<23%,<25%,<30%",options="header",]
 |=======================================================================
 |Priority |As a ... |I want to ... |So that I can...
-|`* * *` |new user |see usage instructions |refer to instructions when I forget how to use the App
+|`* * *` |user |user-friendly UI |no need to read user manual
 
-|`* * *` |user |add a new person |
+|`* * *` |user |sorted alphabetically for default |be easier to find contacts
 
-|`* * *` |user |delete a person |remove entries that I no longer need
+|`* * *` |user |select a few contacts(for deleting/printing/sending) |take action at once
 
-|`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
+|`* * *` |user |clear the entire addressbook |clear all at once
 
-|`* *` |user |hide link:#private-contact-detail[private contact details] by default |minimize chance of someone else seeing them by accident
+|`* * *` |new user |overview of input commands |use the addressbook right away
 
-|`*` |user with many persons in the address book |sort persons by name |locate a person easily
+|`* * *` |user |add a person |look one up if I forgot ones details
+
+|`* * *` |user |search by partial of the name  |be easier to find contacts
+
+|`* * *` |user |edit contacts |keep the addresbook up-to-date
+
+|`* * *` |user |customize UI theme |feel more intimate with the addressbook
+
+|`* * *` |user |shortcuts for common commands |type less
+
+|`* * *` |user |delete a person |keep the addresbook up-to-date
+
+|`* * *` |user |categorise contacts |be easier to find contacts
+
+|`* *` |user |have a blacklist |identify the one I want to block
+
+|`* *` |user |remind me of the upcoming birthdays |celebrate my friends' birthday
+
+|`* *` |user |see birthdays of my contacts in calender view |be easier to spot if it is in weekdays
+
+|`* *` |user |print contacts |have a overview
+
+|`* *` |user |share contacts to my friends |make their life easier by having contacts without typing in one by one
+
+|`* *` |user |find by address |check who live around me
+
+|`* *` |user |save contacts in .csv format |export the addressbook
+
+|`* *` |user |sort by address |know if some of my contacts live close by
+
+|`* *` |user |restore the addressbook to the most recent status |restore the addressbook if I accidentally deleted it
+
+|`* *` |user |sort by phone number |be easier to find contacts
+
+|`* *` |user |redo/undo |restore the contact I altered
+
+|`* *` |user |find by email |find the one who send me emails
+
+|`* *` |user |passcode lock |protect the addressbook
+
+|`* *` |user |assign numbers(0-9) for VIPs |be easier to find VIPs
+
+|`* *` |user |input my search with voice |keep my hands free
+
+|`*` |user |send text messeage to contacts directly in the addressbook |stay in the application contacting them
+
+|`*` |user |know the location status of contacts |meet them on the street
+
+|`*` |user |sort by email |be easier to find contacts
 |=======================================================================
 
 {More to be added}
@@ -767,7 +1195,113 @@ Use case ends.
 +
 Use case resumes at step 2.
 
-{More to be added}
+[discrete]
+=== Use case: Add person
+
+*MSS*
+
+1.  User requests to add person
+2.  AddressBook adds the person
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Person's name is not found in Addressbook.
+** 2a1. Person is not added to Addressbook.
++
+Use case ends.
+
+[discrete]
+=== Use case: View help command
+
+*MSS*
+
+1.  User requests to view help commands
+2.  AddressBook lists help commands
++
+Use case ends.
+
+[discrete]
+=== Use case: Edit contact
+
+*MSS*
+
+1.  User requests to edit contact
+2.  AddressBook updates the contact
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Person's name is not found in Addressbook.
+** 2a1. Contact is not edited.
++
+Use case ends.
+
+[none]
+* 2b. Person's name is found in Addressbook.
+** 2b1. Error message and ontact is not edited.
++
+Use case ends.
+
+[none]
+* 2c. No field changed.
+** 2c1. Error message and ontact is not edited.
++
+Use case ends.
+
+[discrete]
+=== Use case: List contact
+
+*MSS*
+
+1.  User requests to list contacts
+2.  AddressBook lists the contacts
++
+Use case ends.
+
+[discrete]
+=== Use case: Clear Addressbook
+
+*MSS*
+
+1.  User requests to clear Addressbook
+2.  AddressBook clears the contacts
++
+Use case ends.
+
+[discrete]
+=== Use case: find contact
+
+*MSS*
+
+1.  User requests to find 2 different names
+2.  AddressBook lists the contacts found
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 2a. Both persons' names are not found in Addressbook.
+** 2a1. No contact listed.
++
+Use case ends.
+
+[none]
+* 2b. Only one person's name is found in Addressbook.
+** 2b1. Only contact found is listed.
++
+Use case ends.
+
+[none]
+* 2c. Names are incomplete.
+** 2c1. No contact listed.
++
+Use case ends.
 
 [appendix]
 == Non Functional Requirements
@@ -775,6 +1309,12 @@ Use case resumes at step 2.
 .  Should work on any link:#mainstream-os[mainstream OS] as long as it has Java `1.8.0_60` or higher installed.
 .  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 .  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+.  The application only support in English.
+.  The application file size is limited to a max of 30MB.
+.  The system should be backward compatible with the data produced by earlier version of the system.
+.  System requirement: the application can work on window 10.1 or later and Mac OS 10.12 or later.
+.  The project development time should not be more than 6 weeks
+.  This addressbook application is open source.
 
 {More to be added}
 
@@ -795,6 +1335,54 @@ Private contact detail
 A contact detail that is not meant to be shared with others
 ....
 
+[[GUI]]
+GUI
+
+...
+A graphical user interface that allows visual interaction with the computer
+...
+
+[[platform/resolution-specific-idiosyncrasies]
+Platform/Resolution specific idiosyncrasies
+
+...
+Peculiar software behaviour specific to the operating system
+...
+
+[[headless-mode]]
+Headless mode
+
+...
+A mode without requiring the use of a graphical user interface
+...
+
+[[Continuous-Integration]]
+Continuous Integration
+
+...
+Producing a clean build of the project frequently
+...
+
+[[throw-an-Exception]]
+Throw an Exception
+
+...
+A function indicates to a user that an exception has occurred depending on the input
+...
+
+[[Use-Cases]]
+Use Cases
+
+...
+The interactions that happen between the user and the application to achieve a specific end result
+...
+
+[[Non-functional-requirements]]
+Non Functional Requirements
+
+...
+A requirement that describes how a system works
+...
 [appendix]
 == Product Survey
 

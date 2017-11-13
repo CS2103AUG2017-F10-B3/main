@@ -1,0 +1,156 @@
+= Lai Feng - Project Portfolio
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== Project: AddressBook
+AddressBook - Level 4 is a desktop address book application which stores the contact, email, address of the user contact personnel. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java.
+
+*Code contributed*: [https://github.com/CS2103AUG2017-F10-B3/main/blob/master/collated/main/henryheyhey92.md [Functional]]
+{give links to collated code files}
+
+=== Enhancement Added: Find contact by first Alphabet letter
+
+The search is non-case insensitive. e.g `A` will match `Alan`(*for example)
+Only the name is searched.
+Only full words will be matched e.g. `h` will not match `Hans`
+Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `H` will return `Hans Gruber`, `Ho Yang`
+
+Examples:
+
+* `letter J` +
+Returns `John` and `John Doe`
+* `letter B` +
+Returns any person having names `Betsy`, `Bean`, or `Ben`
+
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=findletter]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+User might need a short cut to find the relative contact in alphabetical order.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=findletter]
+
+#End of Extract#
+
+---
+=== Enhancement Added: Exit Programming
+
+When user attempt to close the application, input "exit" command or close the application by accident,
+a window will pop out to make sure that user is firm on closing the application.
+
+The command to execute is by entering the key word 'exit' or by clicking on the cross button on top left corner.
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=exitcheck]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+User might exit the program by accident. This is to seek confirmation from the user that he/she wish to exit from
+the program.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=exitcheck]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: Passcode login
+
+User have to enter user name and password to access the application.
+The user name and password currently hardcoded into the system.
+Please input the following to access the application
+
+User name: NUS
+Password: 1234
+
+Input the following to enter the application:
+
+User name: NUS
+
+Password: 1234
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=lock]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+User would need to provide information before accessing the application.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=lock]
+
+#End of Extract#
+
+---
+=== Enhancement: Lock command
+This is an enhancement to improve the security of the address. When user taking short break, user can lock
+the application for the time being, so that no one can access while leaving the computer on. User can always unlock the application when return from break.
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=unlock]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+In the event that user wishes to leave the computer application open but do not want people to get
+access to the application. This can temporary lock the application from being use by the other people.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=unlock]
+
+#End of Extract#
+
+---
+

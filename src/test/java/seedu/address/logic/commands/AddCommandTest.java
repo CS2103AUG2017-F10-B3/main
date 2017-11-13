@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.Rule;
@@ -24,6 +25,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -113,7 +115,17 @@ public class AddCommandTest {
         }
 
         @Override
+        public void save() {
+            fail("This method should not be called.");
+        }
+
+        @Override
         public void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void copy(ReadOnlyPerson target, String choice) {
             fail("This method should not be called.");
         }
 
@@ -121,6 +133,11 @@ public class AddCommandTest {
         public void updatePerson(ReadOnlyPerson target, ReadOnlyPerson editedPerson)
                 throws DuplicatePersonException {
             fail("This method should not be called.");
+        }
+
+        @Override
+        public void sortAddressBook(int option, int saveOption) {
+            fail("This method should not be called");
         }
 
         @Override
@@ -132,6 +149,24 @@ public class AddCommandTest {
         @Override
         public void updateFilteredPersonList(Predicate<ReadOnlyPerson> predicate) {
             fail("This method should not be called.");
+        }
+
+        @Override
+        public List<String> getTagsListAsString(List<Tag> tagStringList) {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public List<Tag> getNormalTagsList() {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public List<Tag> getFilteredTagsList() {
+            fail("This method should not be called.");
+            return null;
         }
     }
 
