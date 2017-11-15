@@ -1,5 +1,5 @@
 # henryheyhey92
-###### \java\seedu\address\ConfirmBox.java
+###### /java/seedu/address/ConfirmBox.java
 ``` java
 public class ConfirmBox {
     private static boolean answer;
@@ -48,7 +48,41 @@ public class ConfirmBox {
 }
 
 ```
-###### \java\seedu\address\logic\commands\LockCommand.java
+###### /java/seedu/address/logic/commands/FindCommandLetter.java
+``` java
+/**
+ * Finds and lists all persons in address book whose name contains any of the argument keywords.
+ * Keyword matching is case sensitive.
+ */
+public class FindCommandLetter extends Command {
+
+    public static final String COMMAND_WORD = "letter";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names contain any of "
+            + "the specified keywords (non case-sensitive) and displays them as a list with index numbers.\n"
+            + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
+            + "Example: " + COMMAND_WORD + " A ";
+
+    private final NameLetterContainsKeywordPredicate predicate;
+
+    public FindCommandLetter(NameLetterContainsKeywordPredicate predicate) {
+        this.predicate = predicate;
+    }
+
+    @Override
+    public CommandResult execute() {
+        model.updateFilteredPersonList(predicate);
+        return new CommandResult(getMessageForPersonListShownSummary(model.getFilteredPersonList().size()));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof FindCommandLetter // instanceof handles nulls
+                && this.predicate.equals(((FindCommandLetter) other).predicate)); // state check
+    }
+```
+###### /java/seedu/address/logic/commands/LockCommand.java
 ``` java
 /**
  * lock application
@@ -73,7 +107,30 @@ public class LockCommand extends UndoableCommand {
     }
 
 ```
-###### \java\seedu\address\LoginBox.java
+###### /java/seedu/address/logic/parser/FindCommandLetterParser.java
+``` java
+/**
+ * Parses input arguments and creates a new FindCommand object
+ */
+public class FindCommandLetterParser implements Parser<FindCommandLetter> {
+    /**
+     * Parses the given {@code String} of arguments in the context of the FindCommand
+     * and returns an FindCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public FindCommandLetter parse(String args) throws ParseException {
+        String trimmedArgs = args.trim();
+        if (trimmedArgs.isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        String[] nameKeywords = trimmedArgs.split("\\s+");
+
+        return new FindCommandLetter(new NameLetterContainsKeywordPredicate(Arrays.asList(nameKeywords)));
+    }
+```
+###### /java/seedu/address/LoginBox.java
 ``` java
 /**
  * This is to create the login window.
@@ -173,7 +230,27 @@ public class LoginBox {
         return false;
     }
 ```
-###### \java\seedu\address\model\person\NameLetterContainsKeywordPredicate.java
+###### /java/seedu/address/MainApp.java
+``` java
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        logger.info("Starting AddressBook " + MainApp.VERSION);
+        window = primaryStage;
+        boolean answer = LoginBox.display("AddressBook Login");
+        if (answer) {
+
+            ui.start(primaryStage);
+
+            window.setOnCloseRequest(e -> {
+                e.consume();
+                stop();
+            });
+
+        }
+
+```
+###### /java/seedu/address/model/person/NameLetterContainsKeywordPredicate.java
 ``` java
 //reused
 /**
@@ -192,11 +269,11 @@ public class NameLetterContainsKeywordPredicate implements Predicate<ReadOnlyPer
         //String letter = person.getName().fullName;
         if (keywords.isEmpty()) {
             return keywords.stream()
-                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
+                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(" ", keyword));
         }
         if (keywords.get(0).length() > 1) {
             return keywords.stream()
-                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword));
+                    .anyMatch(keyword -> StringUtil.containsWordIgnoreCase("", keyword));
         } else {
             String letter2 = String.valueOf(person.getName().fullName.charAt(0));
             //System.out.println(letter2.length());
@@ -212,4 +289,36 @@ public class NameLetterContainsKeywordPredicate implements Predicate<ReadOnlyPer
                 && this.keywords.equals(((NameLetterContainsKeywordPredicate) other).keywords)); // state check
     }
 
+```
+###### /java/seedu/address/ui/PersonCard.java
+``` java
+    private void initTags(ReadOnlyPerson person) {
+        person.getTags().forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: " + getColorForTag(tag.tagName));
+            tags.getChildren().add(tagLabel);
+        });
+```
+###### /java/seedu/address/ui/ResultDisplay.java
+``` java
+    @Subscribe
+    private void handleNewResultAvailableEvent(NewResultAvailableEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        /* Platform.runLater(() -> displayed.setValue(event.message)); */
+        displayed.setValue(event.message);
+```
+###### /java/seedu/address/ui/StatusBarFooter.java
+``` java
+    public StatusBarFooter(String saveLocation, int totalPersons) {
+        super(FXML);
+        setSyncStatus(SYNC_STATUS_INITIAL);
+        setSaveLocation("./" + saveLocation);
+        setTotalPersons(totalPersons);
+        registerAsAnEventHandler(this);
+```
+###### /java/seedu/address/ui/StatusBarFooter.java
+``` java
+    private void setTotalPersons(int totalPersons) {
+        this.totalPersons.setText(totalPersons + " person(s) total");
+    }
 ```

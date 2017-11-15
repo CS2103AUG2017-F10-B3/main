@@ -9,11 +9,11 @@ import seedu.address.logic.commands.FindCommandLetter;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameLetterContainsKeywordPredicate;
 
+//@@author henryheyhey92
 /**
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandLetterParser implements Parser<FindCommandLetter> {
-
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
      * and returns an FindCommand object for execution.
@@ -30,5 +30,4 @@ public class FindCommandLetterParser implements Parser<FindCommandLetter> {
 
         return new FindCommandLetter(new NameLetterContainsKeywordPredicate(Arrays.asList(nameKeywords)));
     }
-
-}
+} //@@author

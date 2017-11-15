@@ -178,7 +178,7 @@ public class MainApp extends Application {
     private void initEventsCenter() {
         EventsCenter.getInstance().registerHandler(this);
     }
-
+    //@@author henryheyhey92
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -196,10 +196,11 @@ public class MainApp extends Application {
 
         }
 
-    }
+    } //@@author
 
     @Override
     public void stop() {
+
         boolean answer = ConfirmBox.display("Exit Check Protocol", "Confirm on exiting the program?");
 
         if (answer) {

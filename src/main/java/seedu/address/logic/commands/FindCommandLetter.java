@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import seedu.address.model.person.NameLetterContainsKeywordPredicate;
 
+//@@author henryheyhey92
 /**
  * Finds and lists all persons in address book whose name contains any of the argument keywords.
  * Keyword matching is case sensitive.
@@ -33,4 +34,4 @@ public class FindCommandLetter extends Command {
                 || (other instanceof FindCommandLetter // instanceof handles nulls
                 && this.predicate.equals(((FindCommandLetter) other).predicate)); // state check
     }
-}
+} //@@author

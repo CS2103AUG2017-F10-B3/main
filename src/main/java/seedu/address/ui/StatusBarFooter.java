@@ -43,14 +43,14 @@ public class StatusBarFooter extends UiPart<Region> {
     @FXML
     private StatusBar saveLocationStatus;
 
-
+    //@@author henryheyhey92
     public StatusBarFooter(String saveLocation, int totalPersons) {
         super(FXML);
         setSyncStatus(SYNC_STATUS_INITIAL);
         setSaveLocation("./" + saveLocation);
         setTotalPersons(totalPersons);
         registerAsAnEventHandler(this);
-    }
+    } //@@author
 
     /**
      * Sets the clock used to determine the current time.
@@ -74,9 +74,11 @@ public class StatusBarFooter extends UiPart<Region> {
         Platform.runLater(() -> this.syncStatus.setText(status));
     }
 
+    //@@author henryheyhey92
     private void setTotalPersons(int totalPersons) {
         this.totalPersons.setText(totalPersons + " person(s) total");
     }
+    //@@author
 
     @Subscribe
     public void handleAddressBookChangedEvent(AddressBookChangedEvent abce) {

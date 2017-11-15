@@ -31,12 +31,12 @@ public class ResultDisplay extends UiPart<Region> {
         resultDisplay.textProperty().bind(displayed);
         registerAsAnEventHandler(this);
     }
-
+    //@@author henryheyhey92
     @Subscribe
     private void handleNewResultAvailableEvent(NewResultAvailableEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         /* Platform.runLater(() -> displayed.setValue(event.message)); */
         displayed.setValue(event.message);
-    }
+    } //@@author
 
 }
