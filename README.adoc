@@ -34,5 +34,6 @@ image::docs/images/Ui.png[width="600"]
 * Some parts of this sample application were inspired by the excellent http://code.makery.ch/library/javafx-8-tutorial/[Java FX tutorial] by
 _Marco Jakob_.
 * AddressBook-Level4 project created by SE-EDU initiative at https://github.com/se-edu/
+* Some parts of AddressBook by Team F10-B3 were inspired by the original developers of the AddressBook-Level4 project.
 
 == Licence : link:LICENSE[MIT]
