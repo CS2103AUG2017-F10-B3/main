@@ -1,0 +1,80 @@
+= Benjamin Ang - Project Portfolio
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== Project: AddressBook - Level 4
+AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 6 kLoC.
+
+*Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] {give links to collated code files}
+
+=== Enhancement Added: Sort
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=sort]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+To have a better overview of contacts in the addressbook.Sorting by name will sort the addressbook
+by name in alphabetical order. Sorting by address will sort the addressbook by address in particular their
+street names in alphabetical order. As sorting by address is base on a look up table of street names in Singapore, contacts whose
+address that cannot be found will be placed at the end of the addressbook.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=sort]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: Copy
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag= copy]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+To have a better overview of contacts in the addressbook.Sorting by name will sort the addressbook
+by name in alphabetical order. Sorting by address will sort the addressbook by address in particular their
+street names in alphabetical order. As sorting by address is base on a look up table of street names in Singapore, contacts whose
+address that cannot be found will be placed at the end of the addressbook.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=sort]
+
+#End of Extract#
+
+---
+
+=== Other contributions
+
+* Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
+* Wrote additional tests to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+
+== Project: PowerPointLabs
+
+{Optionally (not graded), you may include other projects in your portfolio.}

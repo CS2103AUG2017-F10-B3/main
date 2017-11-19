@@ -1,0 +1,123 @@
+= Ng Ki Kan - Project Portfolio
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== Project: AddressBook - Level 4
+AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 6 kLoC.
+
+*Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] {give links to collated code files}
+
+=== Enhancement Added: Find Email
+
+==== External behavior
+
+---
+Finds persons whose email contain any of the given keywords. +
+Format: `findEmail KEYWORD [MORE_KEYWORDS]`
+
+****
+* The search is case insensitive. e.g. `hans` will match `Hans`
+* Partial word can also be searched. e.g. `john` will match `johndoe@example.com`
+* Only the email is searched.
+****
+
+Examples:
+
+* `findEmail jane` +
+Returns `janedoe@example.com`
+
+---
+
+==== Justification
+
+From time to time, we will receive email from unknown email address. This feature comes in handy to look up if it is from a friend.
+
+==== Implementation
+
+---
+The find email mechanism is facilitated by regex. After finding matches, result will be stored in the filtered list that is showing on the UI.
+Further improvement might include allowing user to use flag(e.g. findEmail f/ KEYWORD) to do advance search.
+
+---
+
+=== Enhancement Added: Change Theme
+
+==== External behavior
+
+---
+Change the UI theme through command or UI
+Command Format: `theme light/dark`
+UI: click "File > ____ theme"
+
+---
+
+==== Justification
+
+Address book is a personal application. By allowing user to change the color theme to meet their need, an more intimate connection is formed and it increases app sticky.
+
+==== Implementation
+
+---
+The change theme mechanism is implemented in both command and GUI level by leveraging service bus. By typing command `theme light/dark` or clicking the menu item "Dark theme" or "Light theme", it triggers an internal function "setTheme" and change the theme accordingly.
+
+---
+
+=== Enhancement Added: Advance Find
+
+==== External behavior
+
+---
+
+Find persons whose (address / name / email / phone/ tag) (contain / start with) any of the given keywords.+
+
+Format: `xFind [A/ N/ E/ P/ T/ a/ n/ e/ p/ t/] KEYWORD [MORE_KEYWORDS]`
+****
+* a/: the command finds matching address start with ARGS
+* n/: the command finds matching names start with ARGS
+* e/: the command finds matching emails start with ARGS
+* p/: the command finds matching phone numbers start with ARGS
+* t/: the command finds matching tags start with ARGS
+* A/ N/ E/ P/ T/: the command finds matching [according to the command] containing ARGS
+****
+
+****
+* The search is case insensitive. e.g `A` will match `a`
+* One tag can only be used per request e.g `a/ avenue t/friends` is illegal
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `n/ H` will return `Hans Gruber`, `Ho Yang`
+****
+
+Examples:
+
+* `xFind n/ John Jasmin` +
+Returns any person having names starting with `john` and `jasmin`
+* `xFind P/ 456` +
+Returns any person having phone number containg `456`
+
+---
+
+==== Justification
+
+Due to there is different find command and it decreases the efficiency of our advance users, an advance unified find feature is needed.
+
+==== Implementation
+
+---
+The xFind mechanism is able to search for persons whose Find persons whose (address / name / email / phone/ tag) (contain / start with) any of the given keywords.
+
+Format: `xFind [A/ N/ E/ P/ T/ a/ n/ e/ p/ t/] KEYWORD [MORE_KEYWORDS]`
+
+`A/` is for address search, `N/` is for name search, etc.
+Upper case letter indicates the search will look for result containing any of the given keywords.
+Lower case letter indicates the search will look for result starting with
+any of the given keywords.
+
+---
+
+=== Enhancement Proposed: Add command OutputCSV
+
+
+
+=== Other contributions
+
+* Updated the GUI color scheme

@@ -1,0 +1,130 @@
+= Ng Jin - Project Portfolio
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== Project: AddressBook - Level 4
+AddressBook - Level 4 is a desktop address book application used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 6 kLoC.
+
+*Code contributed*: [https://github.com/CS2103AUG2017-F10-B3/main/blob/master/collated/main/Labradorites.md] [https://github.com/CS2103AUG2017-F10-B3/main/blob/master/collated/test/Labradorites.md] {give links to collated code files}
+
+=== Enhancement Added: Search for persons whose phone numbers contains searched keywords
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=findPhone]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Allowing the user to search for his contacts by phone introduces more flexibility and user-friendliness of AddressBook.
+User's friend may have received a call from a phone number that is unsaved.
+Hence with findPhone, user is able to help check if the number happens to be in his AddressBook.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=findPhone]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: Search for persons whose tags exactly matches searched keywords
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=findTag]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Allowing the user to search for his contacts by tags introduces more flexibility and user-friendliness of AddressBook.
+User is able to filter and see his a group of his contact that are of the same tag which he can then use for relating people or to mass send messages by groups.
+Hence with findTag, user is able to help check if the number happens to be in his AddressBook.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=findTag]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: List all tags added to AddressBook and all tags of most recent listing
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=listTags]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Allowing the user to list tags in 2 ways introduces more flexibility and user-friendliness of AddressBook.
+With listTags, user can see all tags that he has added to AddressBook and can refer to his old tags if he wants to reuse the same name.
+With listTags f, user is able to filter and see a range of tags which he can then use for relating people.
+Hence with listTags, user is able to help check if the number happens to be in his AddressBook.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=listTags]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: Search for person's address according to searched index
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=gAddress]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Allowing users to search for his friends' address on Google Maps at his fingertips makes visiting friends convenient.
+User may want to visit his friend and want to know the surroundings of his friend's neighbourhood so that he does not get lost.
+Being able to check his friend's address on Google Maps at ease makes it easier for him to travel to his friend's house.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=gAddress]
+
+#End of Extract#
+
+---

@@ -10,13 +10,14 @@ ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
 endif::[]
-:repoURL: https://github.com/se-edu/addressbook-level4
+:repoURL: https://github.com/CS2103AUG2017-F10-B3/main.git
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `Team F10-B3`      Since: `Jun 2016`      Licence: `MIT`
 
 == Quick Start
 
 .  Ensure you have Java version `1.8.0_60` or later installed in your Computer.
+
 +
 [NOTE]
 Having any Java 8 version is not enough. +
@@ -40,6 +41,9 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 .  Refer to the link:#features[Features] section below for details of each command.
 
 == Features
+*Note!! user have to enter the User name and Password before starting the application.
+default User name: NUS
+default Password: 1234
 
 ====
 *Command Format*
@@ -54,6 +58,12 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 Format: `help`
 
+=== Changing theme : `Dark theme` / `Light theme`
+
+Change the UI theme through command or UI
+Command Format: `theme light/dark`+
+UI: click "File > ____ theme"
+
 === Adding a person: `add`
 
 Adds a person to the address book +
@@ -67,10 +77,74 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+// tag::sort[]
+=== Sorting the addressbook: `sort`
+
+Sorts the addressbook by address or by name.User can specify if they want to save the sorted state. +
+Format: `sort OPTION SAVE_OPTION` , for quick input use the letter `s` instead of `sort`.
+
+****
+* OPTION keyword allows the user to select whether to sort the addressbook by name or by address.
+* SAVE_OPTION keyword allows the user to save the sorted state of the addressbook and it is an optional input.
+* The sort command is tied to the undo/redo mechanism to facilitate convenience in the event the user enters the wrong sort option.
+* To change or edit the lookup table data, locate the .csv file in `\main\src\main\resources\tables` folder and do the necessary changes on the file.
+* All changes to the .csv file have to conform to the present format which is each value starts on a new line.
+* *DO NOT RENAME THE FILE OR CHANGE THE FILE LOCATION BEFORE BUILDING THE JAR FILE.*
+****
+
+Examples:
+
+* `s n` +
+Sorts the addressbook by name alphabetically.
+* `sort a` +
+Sorts the addressbook by address, in particular by the street name.
+* `s n se` +
+Sorts the addressbook by name and saves the sorted state of the addressbook.
+* `s n` followed by `undo` +
+Sorts the addressbook by name alphabetically.The next input undoes the sort reverting the addressbook to the previous state.
+// end::sort[]
+
 === Listing all persons : `list`
 
 Shows a list of all persons in the address book. +
 Format: `list`
+
+// tag::listTags[]
+=== Listing all tags : `listTags`
+
+Shows a list of unique all tags in the AddressBook or persons currently displayed in PersonPanelList. +
+Tags listed are unique (no duplicates) and sorted alphabetically. +
+Format: `listTags [f]`
+
+***
+* `f`, is optional, allows users to choose between displaying all unique tags added to AddressBook or unique tags of persons currently listed in the PersonPanelList.
+* `listTags` displays list of all unique tags added to AddressBook.
+* `listTags f` displays list of all unique tags of persons listed in the PersonListPanel. `f` referring to "filtered".
+***
+// end::listTags[]
+
+//tag::copy[]
+=== Copying person's information over to system clipboard : `copy`
+
+Copies the selected person's information over to the system clipboard.
+Format: `copy INDEX [CHOICE]` , for quick input use the letter `c` instead of `copy`.
+
+****
+* Both fields after commnad word input `copy` or `c` must be provided.
+* To access the copied data, simply use `ctrl v` to paste the copied data.
+****
+
+Examples:
+
+* `c 1 n` +
+Copies the topmost person's name.
+* `c 2 p` +
+Copies the second topmost person's phone number.
+* `copy 2 e` +
+Copies the second topmost person's email.
+* `copy 2 a` +
+Copies the second topmost person's address.
+//end::copy[]
 
 === Editing a person : `edit`
 
@@ -111,6 +185,129 @@ Examples:
 Returns `john` and `John Doe`
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
+
+=== Locating persons by email: `findEmail`
+
+Finds persons whose email start with any of the given keywords. +
+Format: `findEmail KEYWORD [MORE_KEYWORDS]`
+
+****
+* The search is case insensitive. e.g. `hans` will match `Hans`
+* Partial word can also be searched. e.g. `john` will match `johndoe@example.com`
+* Only the email is searched.
+****
+
+Examples:
+
+* `findEmail jane` +
+Returns `janedoe@example.com`
+
+// tag::findPhone[]
+=== Locating persons by phone: `findPhone`
+
+Finds persons whose phones contain any of the given keywords. +
+Format: `findPhone KEYWORD [MORE_KEYWORDS]`
+
+****
+* Only the phone number is searched.
+* Numbers containing keywords will be matched e.g. `111` will match `911100`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `222 333` will return `0222`, `9333`
+****
+
+Examples:
+
+* `findPhone 000` +
+Returns `10001` and `191000`
+* `find 111 222 333` +
+Returns any person having phone numbers `1111`, `0222`, or `9333`
+// end::findPhone[]
+
+// tag::findTag[]
+=== Locating persons by phone: `findTag`
+
+Finds persons whose tags contain any of the given keywords. +
+Format: `findTag KEYWORD [MORE_KEYWORDS]`
+
+****
+* Only the tag is searched.
+* Tags containing keywords will be matched e.g. `friends` will match `friends`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `friends family` will return `friends`
+****
+
+Examples:
+
+* `findTag friends` +
+Returns `friends`
+* `findTag friends family neighbours` +
+Returns any person having tags `friends`, `family`, or `neighbour`
+// end::findTag[]
+
+// tag::findletter[]
+=== Locating persons by name: `Findletter`
+
+Finds persons whose names contain any of the given keywords. +
+
+Format: `Findletter KEYWORD [1 alphabet character only]`
+
+****
+* The search is non-case insensitive. e.g `A` will match `Alan`(*for example)
+* Only the name is searched.
+* Only full words will be matched e.g. `h` will not match `Hans`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `H` will return `Hans Gruber`, `Ho Yang`
+****
+
+Examples:
+
+* `Findletter J` +
+Returns `John` and `John Doe`
+* `Findletter B` +
+Returns any person having names `Betsy`, `Bean`, or `Ben`
+// end::findletter[]
+
+=== Locating persons with advance features : `xFind`
+
+Find persons whose (address / name / email / phone/ tag) (contain / start with) any of the given keywords.+
+
+Format: `xFind [A/ N/ E/ P/ T/ a/ n/ e/ p/ t/] KEYWORD [MORE_KEYWORDS]`
+****
+* a/: the command finds matching address start with ARGS
+* n/: the command finds matching names start with ARGS
+* e/: the command finds matching emails start with ARGS
+* p/: the command finds matching phone numbers start with ARGS
+* t/: the command finds matching tags start with ARGS
+* A/ N/ E/ P/ T/: the command finds matching [according to the command] containing ARGS
+****
+
+****
+* The search is case insensitive. e.g `A` will match `a`
+* One tag can only be used per request e.g `a/ avenue t/friends` is illegal
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `n/ H` will return `Hans Gruber`, `Ho Yang`
+****
+
+Examples:
+
+* `xFind n/ John Jasmin` +
+Returns any person having names starting with `john` and `jasmin`
+* `xFind P/ 456` +
+Returns any person having phone number containg `456`
+
+// tag::gAddress[]
+=== Searching person's address on Google Maps `gAddress`
+
+Searches person's address on Google Maps with respect to `INDEX` keyed in. +
+Format: `gAddress INDEX`
+
+****
+* Only the address is searched on Google Maps according to index keyed in.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* 1, 2, 3 ...
+****
+
+* `gAddress 1` +
+BrowserPanel now shows searched address of person at index 1 in Google Maps.
+* `gAddress 3` +
+BrowserPanel now shows searched address of person at index 3 in Google Maps
+// end::gAddress[]
 
 === Deleting a person : `delete`
 
@@ -227,6 +424,50 @@ Format: `exit`
 Address book data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
 
+
+=== Adding a birthday for a person
+
+Clicking on the menu next to each person's names followed by clicking "Set Birthday" allows a birthdate to be
+added for a person. After selecting the birthdate in the date picker, the birthday label of the person has to be
+clicked on for the changes to be shown.
+
+image::get1.png[width="800"]
+
+image::get2.png[width="800"]
+
+
+=== Number of person in list
+
+At the bottom of the addressbook, application will display the number of person in list.
+// tag::exitcheck[]
+=== Exit program checker
+
+When user attempt to close the application, input "exit" command or close the application by accident,
+a window will pop out to make sure that user is firm on closing the application.
+// end::exitcheck[]
+
+// tag::lock[]
+=== Login Page
+
+User have to enter user name and password to access the application.
+The user name and password currently hardcoded into the system.
+Please input the following to access the application
+
+User name: NUS
+Password: 1234
+
+Input the following to enter the application:
+default User name: NUS
+default Password: 1234
+// end::lock[]
+// tag::unlock[]
+=== Lock Command
+
+User can type in 'lock' to the command line.
+It will block user from using the application.
+Follow by the pop out of the login page, user will have to input the password again to access the application.
+// end::unlock[]
+
 == FAQ
 
 *Q*: How do I transfer my data to another Computer? +
@@ -243,10 +484,45 @@ e.g. `delete 3`
 e.g. `edit 2 n/James Lee e/jameslee@example.com`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
+* *Find Email* : `findEmail KEYWORD [MORE_KEYWORDS]` +
+e.g. `findEmail Jane`
+* *Find Phone* : `findPhone KEYWORD [MORE_KEYWORDS]` +
+e.g. `findPhone 000 111`
+* *Find Tag* : `findTag KEYWORD [MORE_KEYWORDS]` +
+e.g. `findTag neighbour family`
+* *Advance Find* : `xFind KEYWORD [MORE_KEYWORDS]` +
+e.g. `xFind N/ John Jasmin`
 * *List* : `list`
+* *List Tags* : `listTags [f]`
+* *Google Address* : `gAddress INDEX` +
+e.g. `gAddress 1`
 * *Help* : `help`
 * *Select* : `select INDEX` +
 e.g.`select 2`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
+* *letter* : `letter KEYWORD [1 alphabet character only]`
+
+== Added functions
+* * findEmail `Since v1.2`
+* * findPhone `Since v1.2`
+* * letter `Since v1.2`
+* * Google search Address when contact is selected `Since v1.2` `Converted to gAddress in V1.5`
+* * Sort by address `Since v1.2`
+* * Copy to clipboard `Since v1.3`
+* * findTag `Since v1.3`
+* * Sort command with save option `Since v1.3`
+* * Program exit check `Since v1.3`
+* * List all tags `Since v1.4`
+* * Login UI `Since v1.4`
+* * Change UI theme `Since v1.4`
+* * Add birthday calendar `Since v1.4`
+* * Advance find `Since v1.5`
+* * Google search address by CLI `Since v1.5`
+
+== Coming soon in V2.0
+* * Transition pop-up window when closing AddressBook
+* * Google search Address of contact via the command line
+* * Export to csv format
+* * Import function

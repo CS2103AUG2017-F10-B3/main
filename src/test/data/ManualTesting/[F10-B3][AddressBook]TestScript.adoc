@@ -1,0 +1,541 @@
+== Find Email Command
+
+Finds persons whose email start with any of the given keywords. +
+Format: `findEmail KEYWORD [MORE_KEYWORDS]`
+
+****
+* The search is case insensitive. e.g. `hans` will match `Hans`
+* Partial word can also be searched. e.g. `john` will match `johndoe@example.com`
+* Only the email is searched.
+****
+
+[discrete]
+=== Positive Test Cases
+. `findEmail alex`
+** *Expected output* +
+Display help window.
+It will display "1 persons listed!"
+
+. `findEmail alex john`
+** *Expected output* +
+Display help window.
+It will display "2 persons listed!"
+
+
+[discrete]
+=== Negative Test Cases
+. `FindEmail`
+** *Expected output* +
+It will display "Unknown command"
+
+. `findEmail lex`
+** *Expected output* +
+It will display "0 persons listed!"
+
+. `findEmail`
+** *Expected output* +
+It will display "Invalid command format!"
+
+== Change Theme Command
+
+Change the UI theme through command or UI
+Command Format: `theme light/dark`
+UI: click "File > ____ theme"
+
+[discrete]
+=== Positive Test Cases
+. `theme light`
+** *Expected output* +
+Display help window.
+It will display "Changed color theme."
+
+
+[discrete]
+=== Negative Test Cases
+. `theme`
+** *Expected output* +
+It will display "Invalid command format!"
+
+== Advance Find Command
+
+Find persons whose (address / name / email / phone/ tag) (contain / start with) any of the given keywords.+
+
+Format: `xFind [A/ N/ E/ P/ T/ a/ n/ e/ p/ t/] KEYWORD [MORE_KEYWORDS]`
+****
+* a/: the command finds matching address start with ARGS
+* n/: the command finds matching names start with ARGS
+* e/: the command finds matching emails start with ARGS
+* p/: the command finds matching phone numbers start with ARGS
+* t/: the command finds matching tags start with ARGS
+* A/ N/ E/ P/ T/: the command finds matching [according to the command] containing ARGS
+****
+
+****
+* The search is case insensitive. e.g `A` will match `a`
+* One tag can only be used per request e.g `a/ avenue t/friends` is illegal
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `n/ H` will return `Hans Gruber`, `Ho Yang`
+****
+
+[discrete]
+=== Positive Test Cases
+. `xFind N/ alex john`
+** *Expected output* +
+Display help window.
+It will display "2 persons listed!"
+
+. `xFind T/ friends`
+** *Expected output* +
+Display help window.
+It will display "2 persons listed!"
+
+[discrete]
+=== Negative Test Cases
+. `xFind`
+** *Expected output* +
+It will display "Invalid command format!"
+
+. `xFind T/ friends n/ alex`
+** *Expected output* +
+It will display Invalid command format! xFind: only one parameter is allowed"
+
+=== Find Letter Command
+
+Finds persons whose name start with character that matches key alphabet letter. +
+Format: `letter KEYLETTER
+
+****
+* The search is non case sensitive. e.g. `H` will match `Hans` and `h` will not match `Hans`
+* The person related to the letter will be display on the left panel.
+****
+[discrete]
+
+=== Positive Test Cases
+
+. `letter A`
+** *Expected output* +
+Display help window.
+
+It will display "2 persons listed!"
+
+[discrete]
+
+=== Negative Test Cases
+
+ `letter`
+** *Expected output* +
+Invalid command format!
+find: Finds all persons whose names contain any of the specified keywords ( non case-sensitive) and displays them as a list with index numbers.
+Parameters: KEYWORD [MORE_KEYWORDS]...
+. `letter A`
+** *Expected output* +
+It will display "0 persons listed!"
+
+=== Login Page Box
+
+User are require to input, User name and password to access the application.
+
+[discrete]
+=== Positive Test Cases
+
+input Username with `NUS`
+
+input Password with `1234`
+
+** *Expected output* +
+
+The application launch.
+
+[discrete]
+
+=== Negative Test Cases
+
+input Username with `NTU`
+
+input Password with `4567`
+
+** *Expected output* +
+
+Remains at the Login in box.
+
+input Username with `SMU`
+
+input Password with `8911`
+
+** *Expected output* +
+
+Remains at the Login in box.
+
+[discrete]
+
+=== Lock Command
+
+Input lock command to the commandline Textfield, it will pause the application
+and prevent the user from using it.
+[discrete]
+
+=== Positive Test Cases
+`lock`
+
+** *Expected output* +
+
+The login page will pop out
+
+`lock + [some other word]
+
+** *Expected output* +
+
+The login page will pop out
+
+[discrete]
+=== negative Test Cases
+
+** *Expected output*
+
+Unknown Command will return to the message box.
+
+When input is `lll lock`
+
+** *Expected output* +
+
+Unknown Command will return to the message box.
+
+=== Exit program checker
+
+This is to prevent user from exiting the program by accident.
+
+User can either click on the close button or in the command Textfield type in exit
+
+[discrete]
+=== Positive Test Cases
+
+input `exit`
+
+** *Expected output* +
+
+A pop window occur, asking if user wants to exit the program or not to exit.
+
+if Yes, application close.
+
+if no, unfreeze the application.
+
+[discrete]
+=== Negative Test Cases
+
+input `eXit`
+
+** *Expected output* +
+
+Unknown Command will return to the message box.
+
+input `ex0it`
+
+** *Expected output* +
+
+Unknown Command will return to the message box.
+
+input `11 exit`
+
+** *Expected output* +
+
+Unknown Command will return to the message box.
+
+=== Copy Command
+
+Copies the selected person's information over to the system clipboard.
+Format: `copy INDEX [CHOICE]` , for quick input use the letter `c` instead of `copy`.
+
+****
+* Both fields after commnad word input `copy` or `c` must be provided.
+* To access the copied data, simply use `ctrl v` to paste the copied data.
+****
+
+Examples:
+
+* `c 1 n` +
+Copies the topmost person's name.
+* `c 2 p` +
+Copies the second topmost person's phone number.
+* `copy 2 e` +
+Copies the second topmost person's email.
+* `copy 2 a` +
+Copies the second topmost person's address.
+[discrete]
+=== Positive Test Case
+. `copy 1 n`
+** *Expected output* +
+It will display "Person's name has been copied to the clipboard"
+Use ctrl-v to check whether correct data has been copied.
+
+. `copy 2 a`
+** *Expected output* +
+It will display "Person's address has been copied to the clipboard"
+Use ctrl-v to check whether correct data has been copied.
+[discrete]
+=== Negative Test Case
+. `c`
+** *Expected output* +
+It will display "Invalid command format!
+                 c: Copies the details of the person identified by index number used in the last person listing. Data would be copied to the system clipboard.
+                 Parameters: INDEX (must be a positive integer) PREFIX
+                 Example: c 1 n"
+. `c &% n`
+** *Expected output* +
+It will display "Invalid command format!
+                 c: Copies the details of the person identified by index number used in the last person listing. Data would be copied to the system clipboard.
+                 Parameters: INDEX (must be a positive integer) PREFIX
+                 Example: c 1 n"
+. `c 1 %^f`
+** *Expected output* +
+It will display " Invalid command format!
+                  Invalid choice input,the valid choices to be copied are:
+                  1. n (name)
+                  2. a (address)
+                  3. e (email)
+                  4. p (phone)
+=== Sort Command
+
+Sorts the addressbook by address or by name.User can specify if they want to save the sorted state. +
+Format: `sort OPTION SAVE_OPTION` , for quick input use the letter `s` instead of `sort`.
+
+****
+* OPTION keyword allows the user to select whether to sort the addressbook by name or by address.
+* SAVE_OPTION keyword allows the user to save the sorted state of the addressbook and it is an optional input.
+* The sort command is tied to the undo/redo mechanism to facilitate convenience in the event the user enters the wrong sort option.
+* To change or edit the lookup table data, locate the .csv file in `\main\src\main\resources\tables` folder and do the necessary changes on the file.
+* All changes to the .csv file have to conform to the present format which is each value starts on a new line.
+* *DO NOT RENAME THE FILE OR CHANGE THE FILE LOCATION BEFORE BUILDING THE JAR FILE.*
+****
+
+Examples:
+
+* `s n` +
+Sorts the addressbook by name alphabetically.
+* `sort a` +
+Sorts the addressbook by address, in particular by the street name.
+* `s n se` +
+Sorts the addressbook by name and saves the sorted state of the addressbook.
+* `s n` followed by `undo` +
+Sorts the addressbook by name alphabetically.The next input undoes the sort reverting the addressbook to the previous state.
+[discrete]
+== Positive Test Case
+. `s a`
+** *Expected output* +
+It will display "The address book has been sorted alphabetically according to address"
+Person list panel would be sorted according to the address by their street names.
+
+. `sort n`
+** *Expected output* +
+It will display "The address book has been sorted alphabetically according to name"
+Person list panel would be sorted according to name alphabetically.
+
+. `sort n se`
+** *Expected output* +
+It will display "The address book has been sorted alphabetically according to name"
+Person list panel would be sorted according to name alphabetically.Re-launching the app would still
+reflect the sorted state of the addressbook.
+[discrete]
+== Negative Test Case
+. `s`
+** *Expected output* +
+It will display "Invalid command format!
+                 s: Sorts the addressbook by name or by address, the state of the addressbook can be saved if specified explicitly.
+                 Parameters: SORT_OPTION(must be one of the valid choices)  SAVE_OPTION(optional field)
+                 Example: s a se"
+. `s t%$`
+** *Expected output* +
+It will display "Invalid command format!
+                 Invalid choice input,the valid choices to be sorted are:
+                 1. n (name)
+                 2. a (address)"
+. `s a TY`
+** *Expected output* +
+It will display "Invalid command format!
+                 Invalid input for save option, to save please use keyword -> se "
+== Find Phone Command
+
+Finds persons whose phones contain any of the given keywords. +
+Format: `findPhone KEYWORD [MORE_KEYWORDS]`
+
+****
+* Only the phone number is searched.
+* Numbers containing keywords will be matched e.g. `111` will match `911100`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `222 333` will return `0222`, `9333`
+****
+
+[discrete]
+=== Positive Test Cases
+. `findPhone 22`
+** *Expected output* +
+It will display "1 persons listed!" and list person with phone number containing "22".
+
+. `findPhone 22 10`
+** *Expected output* +
+It will display "3 persons listed!" and list persons with phone numbers containing "22" and/or "10".
+
+
+[discrete]
+=== Negative Test Cases
+
+. `findPhone`
+** *Expected output* +
+It will display "Invalid command format!" and command usage message.
+
+. `findPhone `
+** *Expected output* +
+Invalid command format!
+findPhone: Finds all persons whose phone contain any of the specified numbers() and displays them as a list with index numbers.
+Parameters: KEYWORD [MORE_KEYWORDS]...
+Example: findPhone 999 111 99998888
+
+. `findPhone 0000000000000`
+** *Expected output* +
+It will display "0 persons listed!" as no one with phone number containing 0000000000000 is found.
+
+== Find Tag Command
+
+Finds persons whose tags contain any of the given keywords. +
+Format: `findTag KEYWORD [MORE_KEYWORDS]`
+
+****
+* Only the tag is searched.
+* Tags containing keywords will be matched e.g. `friends` will match `friends`
+* Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `friends family` will return `friends`
+****
+
+[discrete]
+=== Positive Test Cases
+. `findTag friends`
+** *Expected output* +
+It will display "3 persons listed!" and list person with the tag "friends".
+
+. `findTag friends family`
+** *Expected output* +
+It will display "8 persons listed!" and list persons with tags "friends" and/or "family".
+
+. `findTag Friends`
+** *Expected output* +
+It will display "3 persons listed!" and list persons with tags "friends".
+
+
+[discrete]
+=== Negative Test Cases
+. `findTag`
+** *Expected output* +
+Invalid command format!
+findTag: Finds all persons whose tags contain the specified keywords (case-sensitive) and displays them as a list with index numbers.
+Parameters: KEYWORD [MORE_KEYWORDS]...
+Example: findTag neighbours
+
+. `findTag frien`
+** *Expected output* +
+It will display "0 persons listed!" as no one with tag matching frien is found.
+
+== List Tags Command
+
+Shows a list of unique all tags in the AddressBook or persons currently displayed in PersonPanelList. +
+Tags listed are unique (no duplicates) and sorted alphabetically. +
+Format: `listTags [f]`
+
+***
+* `f`, is optional, allows users to choose between displaying all unique tags added to AddressBook or unique tags of persons currently listed in the PersonPanelList.
+* `listTags` displays list of all unique tags added to AddressBook.
+* `listTags f` displays list of all unique tags of persons listed in the PersonListPanel. `f` referring to "filtered".
+***
+
+[discrete]
+=== Positive Test Cases
+. `list` +
+`listTags`
+** *Expected output* +
+List all tags:
+bestfriend
+brother
+classmates
+colleagues
+family
+father
+friend
+friends
+mother
+neighbours
+projectmate
+
+. `findPhone 10` +
+`listTags f`
+** *Expected output* +
+List all tags:
+family
+neighbours
+
+
+[discrete]
+=== Negative Test Cases
+. `listTags s`
+** *Expected output* +
+Invalid command format!
+listTags: Finds tags according to choice.
+1. To list all tags available in AddressBook: listTags
+2. To list all tags of persons currently shown below: listTags f
+
+. `listTags F`
+** *Expected output* +
+Invalid command format!
+listTags: Finds tags according to choice.
+1. To list all tags available in AddressBook: listTags
+2. To list all tags of persons currently shown below: listTags f
+
+. `findPhone 1111` +
+`listTags f`
+** *Expected output* +
+There are no tags available.
+
+== Google Address Command
+
+Searches person's address on Google Maps with respect to `INDEX` keyed in. +
+Format: `gAddress INDEX`
+
+****
+* Only the address is searched on Google Maps according to index keyed in.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* 1, 2, 3 ...
+****
+
+[discrete]
+=== Positive Test Cases
+. `list` +
+`gAddress 1`
+** *Expected output* +
+It will display "Searched aaron lee on GoogleMaps".
+Browser Panel will display person's address being searched on Google Maps.
+
+
+[discrete]
+=== Negative Test Cases
+. `gAddress`
+** *Expected output* +
+Invalid command format!
+gAddress: Searches for person's address in GoogleMaps.
+Parameters: INDEX (must be a positive integer)
+Example: gAddress 1
+
+. `list` +
+`gAddress 0`
+** *Expected output* +
+Invalid command format!
+gAddress: Searches for person's address in GoogleMaps.
+Parameters: INDEX (must be a positive integer)
+Example: gAddress 1
+
+. `list` +
+`gAddress -1`
+** *Expected output* +
+Invalid command format!
+gAddress: Searches for person's address in GoogleMaps.
+Parameters: INDEX (must be a positive integer)
+Example: gAddress 1
+
+. `list` +
+`gAddress 22`
+** *Expected output* +
+The person index provided is invalid
+

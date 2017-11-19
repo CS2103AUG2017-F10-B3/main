@@ -40,17 +40,15 @@ import seedu.address.ui.UiManager;
  */
 public class MainApp extends Application {
 
-    public static final Version VERSION = new Version(0, 6, 0, true);
-
+    public static final Version VERSION = new Version(1, 5, 0, true);
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
-
-    protected Ui ui;
-    protected Logic logic;
-    protected Storage storage;
-    protected Model model;
     protected Config config;
+    protected Logic logic;
+    protected Model model;
+    protected Storage storage;
+    protected Ui ui;
     protected UserPrefs userPrefs;
-
+    private Stage window;
 
     @Override
     public void init() throws Exception {
@@ -180,25 +178,47 @@ public class MainApp extends Application {
     private void initEventsCenter() {
         EventsCenter.getInstance().registerHandler(this);
     }
-
+    //@@author henryheyhey92
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
+
         logger.info("Starting AddressBook " + MainApp.VERSION);
-        ui.start(primaryStage);
-    }
+        window = primaryStage;
+        boolean answer = LoginBox.display("AddressBook Login");
+        if (answer) {
+
+            ui.start(primaryStage);
+
+            window.setOnCloseRequest(e -> {
+                e.consume();
+                stop();
+            });
+
+        }
+
+    } //@@author
 
     @Override
     public void stop() {
-        logger.info("============================ [ Stopping Address Book ] =============================");
-        ui.stop();
-        try {
-            storage.saveUserPrefs(userPrefs);
-        } catch (IOException e) {
-            logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
+
+        boolean answer = ConfirmBox.display("Exit Check Protocol", "Confirm on exiting the program?");
+
+        if (answer) {
+            //GoodByeBox.display("Title", "Good bye and have a nice day");
+            logger.info("============================ [ Stopping Address Book ] =============================");
+
+            ui.stop();
+            try {
+                storage.saveUserPrefs(userPrefs);
+            } catch (IOException e) {
+                logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
+            }
+            Platform.exit();
+            System.exit(0);
         }
-        Platform.exit();
-        System.exit(0);
+
     }
+
 
     @Subscribe
     public void handleExitAppRequestEvent(ExitAppRequestEvent event) {
@@ -208,5 +228,10 @@ public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+
+    public void pause() {
+        ui.pause();
     }
 }
